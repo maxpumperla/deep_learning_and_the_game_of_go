@@ -30,14 +30,14 @@ class GoString(object):
     def add_liberty(self, point):
         self.liberties.add(point)
 
-    def merged_with(self, string):
-        """Return a new string containing all stones in both strings."""
-        assert string.color == self.color
-        combined_stones = self.stones | string.stones
+    def merged_with(self, go_string):
+        """Return a new Go string containing all stones in both strings."""
+        assert go_string.color == self.color
+        combined_stones = self.stones | go_string.stones
         return GoString(
             self.color,
             combined_stones,
-            (self.liberties | string.liberties) - combined_stones)
+            (self.liberties | go_string.liberties) - combined_stones)
 
     @property
     def num_liberties(self):
@@ -127,7 +127,7 @@ class Board(object):
             return None
         return string.color
 
-    def get_string(self, point):
+    def get_go_string(self, point):
         """Return the entire string of stones at a point.
 
         Returns None if the point is empty, or a GoString if there is
@@ -207,7 +207,7 @@ class GameState(object):
             return False
         next_board = copy.deepcopy(self.board)
         next_board.place_stone(player, move.point)
-        new_string = next_board.get_string(move.point)
+        new_string = next_board.get_go_string(move.point)
         return new_string.num_liberties == 0
 # end::self_capture[]
 
