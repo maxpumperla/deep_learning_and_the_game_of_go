@@ -1,12 +1,12 @@
 # Deep Learning and the Game of Go
 
-[Code](https://github.com/maxpumperla/deep_learning_and_the_game_of_go/code), sample chapters and notebooks for the book "Deep Learning and the Game of Go" (Manning), available for early access [here](https://www.manning.com/books/deep-learning-and-the-game-of-go).
+[Code](https://github.com/maxpumperla/deep_learning_and_the_game_of_go/tree/master/code), sample chapters and notebooks for the book "Deep Learning and the Game of Go" (Manning), available for early access [here](https://www.manning.com/books/deep-learning-and-the-game-of-go).
 
 ![dl_go_cover](dl_go_cover.jpg)
 
 # Table of Contents
 
-1. Towards deep learning: a machine learning introduction [code]() | [code]()
+1. Towards deep learning: a machine learning introduction
 2. Machine learning for go
 3. Representing a game of go: a simple search bot
 4. Search and the early years of game AI
