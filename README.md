@@ -14,6 +14,8 @@ The book is all about getting you started to create your own bots. To make the e
 
 These demos will be available in the [liveBook](https://www.manning.com/books/deep-learning-and-the-game-of-go) version of the book as well.
 
+<iframe src="https://www.badukai.com/demos/static/play_predict_19.html" height="800" width="800" style="border:2px solid grey; background-color: #f8f8f8;"></iframe>
+
 ## Table of Contents
 
 1. Towards deep learning: a machine learning introduction
