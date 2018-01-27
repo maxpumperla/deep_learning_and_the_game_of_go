@@ -24,6 +24,10 @@ class EyeTest(unittest.TestCase):
 
     def test_middle(self):
         board = Board(19, 19)
+        # .bbw
+        # .b.b
+        # .bbb
+        # ....
         board.place_stone(Player.black, Point(2, 2))
         board.place_stone(Player.black, Point(3, 2))
         board.place_stone(Player.black, Point(4, 2))
@@ -33,6 +37,20 @@ class EyeTest(unittest.TestCase):
         board.place_stone(Player.black, Point(2, 4))
         board.place_stone(Player.black, Point(2, 3))
         self.assertTrue(is_point_an_eye(board, Point(3, 3), Player.black))
+
+    def test_middle_false_eye(self):
+        board = Board(19, 19)
+        # .bb.
+        # .b.b
+        # .bb.
+        # ....
+        board.place_stone(Player.black, Point(2, 2))
+        board.place_stone(Player.black, Point(3, 2))
+        board.place_stone(Player.black, Point(4, 2))
+        board.place_stone(Player.black, Point(4, 3))
+        board.place_stone(Player.black, Point(3, 4))
+        board.place_stone(Player.black, Point(2, 3))
+        self.assertFalse(is_point_an_eye(board, Point(3, 3), Player.black))
 
 if __name__ == '__main__':
     unittest.main()

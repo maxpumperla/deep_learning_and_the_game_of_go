@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from collections import namedtuple
 
-from .goboard import Player, Point
+from .gotypes import Player, Point
 
 
 class Territory(object):
