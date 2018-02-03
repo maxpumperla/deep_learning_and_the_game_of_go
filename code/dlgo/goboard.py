@@ -146,7 +146,7 @@ class Board():
             return None
         return string.color
 
-    def get_string(self, point):
+    def get_go_string(self, point):
         """Return the entire string of stones at a point.
 
         Returns None if the point is empty, or a GoString if there is
@@ -245,7 +245,7 @@ class GameState():
             return False
         next_board = copy.deepcopy(self.board)
         next_board.place_stone(player, move.point)
-        new_string = next_board.get_string(move.point)
+        new_string = next_board.get_go_string(move.point)
         return new_string.num_liberties == 0
 
     @property
