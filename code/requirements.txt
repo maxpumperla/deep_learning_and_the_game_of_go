@@ -1,0 +1,7 @@
+keras >= 2.0.0
+flask
+flask-cors
+future
+h5py
+tensorflow
+six
