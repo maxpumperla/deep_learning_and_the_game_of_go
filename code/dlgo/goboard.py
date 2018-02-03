@@ -1,5 +1,6 @@
 import copy
-from .gotypes import Player
+from .gotypes import Player, Point
+from .scoring import compute_game_result
 # tag::import_zobrist[]
 from . import zobrist
 # end::import_zobrist[]
@@ -15,7 +16,7 @@ class IllegalMoveError(Exception):
     pass
 
 
-class GoString(object):
+class GoString():
     """Stones that are linked by a chain of connected stones of the
     same color.
     """
@@ -56,7 +57,7 @@ class GoString(object):
 
 
 # tag::init_zobrist[]
-class Board(object):
+class Board():
     def __init__(self, num_rows, num_cols):
         self.num_rows = num_rows
         self.num_cols = num_cols
@@ -66,6 +67,8 @@ class Board(object):
 
     def place_stone(self, player, point):
         assert self.is_on_grid(point)
+        if self._grid.get(point) is not None:
+            print('Illegal play on %s' % str(point))
         assert self._grid.get(point) is None
         # 0. Examine the adjacent points.
         adjacent_same_color = []
@@ -143,7 +146,7 @@ class Board(object):
             return None
         return string.color
 
-    def get_string(self, point):
+    def get_go_string(self, point):
         """Return the entire string of stones at a point.
 
         Returns None if the point is empty, or a GoString if there is
@@ -174,9 +177,8 @@ class Board(object):
 # end::return_zobrist[]
 
 
-class Move(object):
+class Move():
     """Any action a player can play on a turn.
-
     Exactly one of is_play, is_pass, is_resign will be set.
     """
     def __init__(self, point=None, is_pass=False, is_resign=False):
@@ -199,9 +201,16 @@ class Move(object):
     def resign(cls):
         return Move(is_resign=True)
 
+    def __str__(self):
+        if self.is_pass:
+            return 'pass'
+        if self.is_resign:
+            return 'resign'
+        return '(r %d, c %d)' % (self.point.row, self.point.col)
+
 
 # tag::init_state_zobrist[]
-class GameState(object):
+class GameState():
     def __init__(self, board, next_player, previous, move):
         self.board = board
         self.next_player = next_player
@@ -215,16 +224,14 @@ class GameState(object):
         self.last_move = move
 # end::init_state_zobrist[]
 
-    def apply_move(self, player, move):
+    def apply_move(self, move):
         """Return the new GameState after applying the move."""
-        if player != self.next_player:
-            raise ValueError(player)
         if move.is_play:
             next_board = copy.deepcopy(self.board)
-            next_board.place_stone(player, move.point)
+            next_board.place_stone(self.next_player, move.point)
         else:
             next_board = self.board
-        return GameState(next_board, player.other, self, move)
+        return GameState(next_board, self.next_player.other, self, move)
 
     @classmethod
     def new_game(cls, board_size):
@@ -238,7 +245,7 @@ class GameState(object):
             return False
         next_board = copy.deepcopy(self.board)
         next_board.place_stone(player, move.point)
-        new_string = next_board.get_string(move.point)
+        new_string = next_board.get_go_string(move.point)
         return new_string.num_liberties == 0
 
     @property
@@ -256,6 +263,8 @@ class GameState(object):
 # end::ko_zobrist[]
 
     def is_valid_move(self, move):
+        if self.is_over():
+            return False
         if move.is_pass or move.is_resign:
             return True
         return (
@@ -272,3 +281,24 @@ class GameState(object):
         if second_last_move is None:
             return False
         return self.last_move.is_pass and second_last_move.is_pass
+
+    def legal_moves(self):
+        moves = []
+        for row in range(1, self.board.num_rows + 1):
+            for col in range(1, self.board.num_cols + 1):
+                move = Move.play(Point(row, col))
+                if self.is_valid_move(move):
+                    moves.append(move)
+        # These two moves are always legal.
+        moves.append(Move.pass_turn())
+        moves.append(Move.resign())
+
+        return moves
+
+    def winner(self):
+        if not self.is_over():
+            return None
+        if self.last_move.is_resign:
+            return self.next_player
+        game_result = compute_game_result(self)
+        return game_result.winner

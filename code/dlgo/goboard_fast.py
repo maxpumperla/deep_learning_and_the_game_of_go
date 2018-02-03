@@ -50,7 +50,7 @@ class IllegalMoveError(Exception):
     pass
 
 
-class GoString(object):
+class GoString():
     """Stones that are linked by a chain of connected stones of the
     same color.
     """
@@ -90,7 +90,7 @@ class GoString(object):
         return GoString(self.color, self.stones, copy.deepcopy(self.liberties))
 
 
-class Board(object):
+class Board():
     def __init__(self, num_rows, num_cols):
         self.num_rows = num_rows
         self.num_cols = num_cols
@@ -220,7 +220,7 @@ class Board(object):
             return None
         return string.color
 
-    def get_string(self, point):
+    def get_go_string(self, point):
         """Return the entire string of stones at a point.
 
         Returns None if the point is empty, or a GoString if there is
@@ -251,7 +251,7 @@ class Board(object):
 # end::return_zobrist[]
 
 
-class Move(object):
+class Move():
     """Any action a player can play on a turn.
 
     Exactly one of is_play, is_pass, is_resign will be set.
@@ -284,7 +284,7 @@ class Move(object):
         return '(r %d, c %d)' % (self.point.row, self.point.col)
 
 
-class GameState(object):
+class GameState():
     def __init__(self, board, next_player, previous, move):
         self.board = board
         self.next_player = next_player
@@ -333,6 +333,8 @@ class GameState(object):
         return next_situation in self.previous_states
 
     def is_valid_move(self, move):
+        if self.is_over():
+            return False
         if move.is_pass or move.is_resign:
             return True
         return (
@@ -351,6 +353,8 @@ class GameState(object):
         return self.last_move.is_pass and second_last_move.is_pass
 
     def legal_moves(self):
+        if self.is_over():
+            return []
         moves = []
         for row in range(1, self.board.num_rows + 1):
             for col in range(1, self.board.num_cols + 1):

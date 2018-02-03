@@ -2,7 +2,7 @@ import unittest
 
 import six
 
-from .goboard import Board, GameState, Move
+from .goboard_fast import Board, GameState, Move
 from .gotypes import Player, Point
 
 
@@ -75,6 +75,46 @@ class BoardTest(unittest.TestCase):
             self,
             [Point(3, 2), Point(2, 3), Point(1, 3)],
             black_string.liberties)
+
+    def test_self_capture(self):
+        # ooo..
+        # x.xo.
+        board = Board(5, 5)
+        board.place_stone(Player.black, Point(1, 1))
+        board.place_stone(Player.black, Point(1, 3))
+        board.place_stone(Player.white, Point(2, 1))
+        board.place_stone(Player.white, Point(2, 2))
+        board.place_stone(Player.white, Point(2, 3))
+        board.place_stone(Player.white, Point(1, 4))
+
+        self.assertTrue(board.is_self_capture(Player.black, Point(1, 2)))
+
+    def test_not_self_capture(self):
+        # o.o..
+        # x.xo.
+        board = Board(5, 5)
+        board.place_stone(Player.black, Point(1, 1))
+        board.place_stone(Player.black, Point(1, 3))
+        board.place_stone(Player.white, Point(2, 1))
+        board.place_stone(Player.white, Point(2, 3))
+        board.place_stone(Player.white, Point(1, 4))
+
+        self.assertFalse(board.is_self_capture(Player.black, Point(1, 2)))
+
+    def test_not_self_capture_is_other_capture(self):
+        # xx...
+        # oox..
+        # x.o..
+        board = Board(5, 5)
+        board.place_stone(Player.black, Point(3, 1))
+        board.place_stone(Player.black, Point(3, 2))
+        board.place_stone(Player.black, Point(2, 3))
+        board.place_stone(Player.black, Point(1, 1))
+        board.place_stone(Player.white, Point(2, 1))
+        board.place_stone(Player.white, Point(2, 2))
+        board.place_stone(Player.white, Point(1, 3))
+
+        self.assertFalse(board.is_self_capture(Player.black, Point(1, 2)))
 
 
 class GameTest(unittest.TestCase):

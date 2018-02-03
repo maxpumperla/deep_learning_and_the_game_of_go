@@ -4,8 +4,11 @@ __all__ = [
 
 
 # tag::agent[]
-class Agent(object):
+class Agent():
     """Interface for a go-playing bot."""
     def select_move(self, game_state):
         raise NotImplementedError()
 # end::agent[]
+
+    def diagnostics(self):
+        return {}

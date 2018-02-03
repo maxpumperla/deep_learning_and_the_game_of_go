@@ -13,7 +13,7 @@ def main():
     bot = agent.RandomBot()
 
     while not game.is_over():
-        print(chr(27) + "[2J")  # clear screen
+        print(chr(27) + "[2J")
         print_board(game.board)
         if game.next_player == gotypes.Player.black:
             human_move = input('-- ')
