@@ -51,13 +51,13 @@ class BoardTest(unittest.TestCase):
         board = Board(5, 5)
         board.place_stone(Player.black, Point(3, 3))
         board.place_stone(Player.white, Point(2, 2))
-        white_string = board.get_string(Point(2, 2))
+        white_string = board.get_go_string(Point(2, 2))
         six.assertCountEqual(
             self,
             [Point(2, 3), Point(2, 1), Point(1, 2), Point(3, 2)],
             white_string.liberties)
         board.place_stone(Player.black, Point(3, 2))
-        white_string = board.get_string(Point(2, 2))
+        white_string = board.get_go_string(Point(2, 2))
         six.assertCountEqual(
             self,
             [Point(2, 3), Point(2, 1), Point(1, 2)],
@@ -70,7 +70,7 @@ class BoardTest(unittest.TestCase):
         board.place_stone(Player.black, Point(2, 2))
         board.place_stone(Player.white, Point(2, 1))
 
-        black_string = board.get_string(Point(1, 1))
+        black_string = board.get_go_string(Point(1, 1))
         six.assertCountEqual(
             self,
             [Point(3, 2), Point(2, 3), Point(1, 3)],

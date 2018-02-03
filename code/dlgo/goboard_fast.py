@@ -220,7 +220,7 @@ class Board():
             return None
         return string.color
 
-    def get_string(self, point):
+    def get_go_string(self, point):
         """Return the entire string of stones at a point.
 
         Returns None if the point is empty, or a GoString if there is
