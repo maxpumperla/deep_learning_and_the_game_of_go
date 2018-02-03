@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<!--
+Spinner CSS from https://github.com/lukehaas/css-loaders/
+
+Spinner CSS license:
+The MIT License (MIT)
+
+Copyright (c) 2014 Luke Haas
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Board</title>
+  <style>
+  body {
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    text-align: center;
+  }
+  .loader,
+  .loader:before,
+  .loader:after {
+      border-radius: 50%;
+      width: 2.5em;
+      height: 2.5em;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+      -webkit-animation: load7 1.8s infinite ease-in-out;
+      animation: load7 1.8s infinite ease-in-out;
+  }
+  .loader {
+      color: #ccc;
+      font-size: 10px;
+      margin: 0px auto;
+      position: relative;
+      text-indent: -9999em;
+      -webkit-transform: translateZ(0);
+      -ms-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-animation-delay: -0.16s;
+      animation-delay: -0.16s;
+  }
+  .loader:before,
+  .loader:after {
+      content: '';
+      position: absolute;
+      top: 0;
+  }
+  .loader:before {
+      left: -3.5em;
+      -webkit-animation-delay: -0.32s;
+      animation-delay: -0.32s;
+  }
+  .loader:after {
+        left: 3.5em;
+  }
+  @-webkit-keyframes load7 {
+      0%, 80%, 100% {
+          box-shadow: 0 2.5em 0 -1.3em;
+      }
+      40% {
+          box-shadow: 0 2.5em 0 0;
+      }
+  }
+  @keyframes load7 {
+      0%, 80%, 100% {
+          box-shadow: 0 2.5em 0 -1.3em;
+      }
+      40% {
+          box-shadow: 0 2.5em 0 0;
+      }
+  }
+  </style>
+</head>
+<body>
+
+<div>Engine: policy gradient learning, 84000 self-play games (chapter 9)</div>
+<div><a href="#" onclick="resetGame(event);">new game</a></div>
+<div id="board"></div>
+<div>
+    <div id="status">Black to play</div>
+    <div id="spinner" style="display: none" class="loader"></div>
+</div>
+<script src="iframeSizer.contentWindow.min.js"></script>
+
+
+<script type="text/javascript" src="./jgoboard-latest.js"></script>
+<script type="text/javascript" src="large/board.js"></script>
+<script type="text/javascript">
+var BOARD_SIZE = 9;
+var jrecord = new JGO.Record(BOARD_SIZE);
+var jboard = jrecord.jboard;
+var jsetup = new JGO.Setup(jboard, JGO.BOARD.largeWalnut);
+var player = JGO.BLACK; // next player
+var ko = false, lastMove = false; // ko coordinate and last move coordinate
+var lastHover = false, lastX = -1, lastY = -1; // hover helper vars
+var record = [];
+var colnames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N'];
+var waitingForBot = false;
+
+function resetGame(ev) {
+    jrecord.jboard.clear();
+    jrecord.root = jrecord.current = null;
+    jrecord.info = {};
+    record = [];
+    waitingForBot = false;
+    ev.preventDefault();
+}
+
+function coordsToString(point) {
+    var row = (BOARD_SIZE - 1) - point.j;
+    var col = point.i;
+    return colnames[col] + ((row + 1).toString());
+}
+
+function stringToCoords(move_string) {
+    var colStr = move_string.substring(0, 1);
+    var rowStr = move_string.substring(1);
+    var col = colnames.indexOf(colStr);
+    var row = BOARD_SIZE - parseInt(rowStr, 10);
+    return new JGO.Coordinate(col, row);
+}
+
+function applyMove(player, coord) {
+    var play = jboard.playMove(coord, player, ko);
+
+    if (play.success) {
+        record.push(coordsToString(coord));
+        node = jrecord.createNode(true);
+        node.info.captures[player] += play.captures.length; // tally captures
+        node.setType(coord, player); // play stone
+        node.setType(play.captures, JGO.CLEAR); // clear opponent's stones
+
+        if (lastMove) {
+            node.setMark(lastMove, JGO.MARK.NONE); // clear previous mark
+        }
+        if (ko) {
+            node.setMark(ko, JGO.MARK.NONE); // clear previous ko mark
+        }
+        node.setMark(coord, JGO.MARK.CIRCLE); // mark move
+        lastMove = coord;
+
+      if(play.ko)
+        node.setMark(play.ko, JGO.MARK.CIRCLE); // mark ko, too
+      ko = play.ko;
+    } else alert('Illegal move: ' + play.errorMsg);
+}
+
+function waitForBot() {
+    console.log('Waiting for bot...');
+    document.getElementById('status').style.display = 'none';
+    document.getElementById('spinner').style.display = 'block';
+    waitingForBot = true;
+}
+
+function stopWaiting(botmove) {
+    var text = 'Bot plays ' + botmove;
+    if (botmove == 'pass') {
+        text = 'Bot passes';
+    } else if (botmove == 'resign') {
+        text = 'Bot resigns';
+    }
+    document.getElementById('status').innerHTML = text;
+    document.getElementById('status').style.display = 'block';
+    document.getElementById('spinner').style.display = 'none';
+    waitingForBot = false;
+}
+
+jsetup.setOptions({stars: {points:5}});
+jsetup.create('board', function(canvas) {
+  canvas.addListener('click', function(coord, ev) {
+    if (waitingForBot) {
+        return;
+    }
+    var opponent = (player == JGO.BLACK) ? JGO.WHITE : JGO.BLACK;
+
+    if(ev.shiftKey) { // on shift do edit
+      if(jboard.getMark(coord) == JGO.MARK.NONE)
+        jboard.setMark(coord, JGO.MARK.SELECTED);
+      else
+        jboard.setMark(coord, JGO.MARK.NONE);
+
+      return;
+    }
+
+    // clear hover away - it'll be replaced or then it will be an illegal move
+    // in any case so no need to worry about putting it back afterwards
+    if(lastHover)
+      jboard.setType(new JGO.Coordinate(lastX, lastY), JGO.CLEAR);
+
+    lastHover = false;
+
+    console.log('Human', coordsToString(coord));
+    applyMove(JGO.BLACK, coord);
+
+    waitForBot();
+    fetch('/select-move/pg', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({'board_size': BOARD_SIZE, 'moves': record}),
+    }).then(function(response) {
+        if (!waitingForBot) {
+            console.log('Got response but not waiting for one');
+            return;
+        }
+        response.json().then(function(data) {
+            if (data.bot_move == 'pass' || data.bot_move == 'resign') {
+                record.push(data.bot_move);
+            } else {
+                var botCoord = stringToCoords(data.bot_move);
+                applyMove(JGO.WHITE, botCoord);
+            }
+            stopWaiting(data.bot_move);
+        });
+    }).catch(function(error) {
+        console.log(error);
+        stopWaiting(data.bot_move);
+    });
+  });
+
+  canvas.addListener('mousemove', function(coord, ev) {
+    if(coord.i == -1 || coord.j == -1 || (coord.i == lastX && coord.j == lastY))
+      return;
+
+    if(lastHover) // clear previous hover if there was one
+      jboard.setType(new JGO.Coordinate(lastX, lastY), JGO.CLEAR);
+
+    lastX = coord.i;
+    lastY = coord.j;
+
+    if(jboard.getType(coord) == JGO.CLEAR && jboard.getMark(coord) == JGO.MARK.NONE) {
+      jboard.setType(coord, player == JGO.WHITE ? JGO.DIM_WHITE : JGO.DIM_BLACK);
+      lastHover = true;
+    } else
+      lastHover = false;
+  });
+
+  canvas.addListener('mouseout', function(ev) {
+    if(lastHover)
+      jboard.setType(new JGO.Coordinate(lastX, lastY), JGO.CLEAR);
+
+    lastHover = false;
+  });
+});
+</script>
+
+</body>
+</html>
