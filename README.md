@@ -1,1 +1,1 @@
-# Code for chapter XXX
+# Code for chapter 7
