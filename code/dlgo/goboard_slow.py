@@ -170,15 +170,14 @@ class GameState():
         self.previous_state = previous
         self.last_move = move
 
-    def apply_move(self, player, move):  # <1>
-        if player != self.next_player:
-            raise ValueError(player)
+    def apply_move(self, move):  # <1>
+        """Return the new GameState after applying the move."""
         if move.is_play:
             next_board = copy.deepcopy(self.board)
-            next_board.place_stone(player, move.point)
+            next_board.place_stone(self.next_player, move.point)
         else:
             next_board = self.board
-        return GameState(next_board, player.other, self, move)
+        return GameState(next_board, self.next_player.other, self, move)
 
     @classmethod
     def new_game(cls, board_size):
