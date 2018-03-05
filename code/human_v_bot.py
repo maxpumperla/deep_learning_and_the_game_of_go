@@ -1,7 +1,7 @@
 from __future__ import print_function
 # tag::play_against_your_bot[]
 from dlgo import agent
-from dlgo import goboard
+from dlgo import goboard_slow as goboard
 from dlgo import gotypes
 from dlgo.utils import print_board, print_move, point_from_coords
 from six.moves import input
