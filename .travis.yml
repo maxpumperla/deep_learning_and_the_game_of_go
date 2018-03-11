@@ -1,0 +1,24 @@
+sudo: required
+dist: trusty
+language: python
+python:
+  - "2.7"
+  - "3.4"
+before_install:
+  - sudo apt-get install -y python-dev python-pip python-virtualenv gfortran libhdf5-dev pkg-config
+install:
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pandas pytest h5py flask nose six tensorflow theano
+  - source activate test-environment
+  - python setup.py install
+script: nosetests --with-coverage
