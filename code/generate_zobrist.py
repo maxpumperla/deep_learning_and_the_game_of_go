@@ -18,11 +18,9 @@ table = {}
 empty_board = 0
 for row in range(1, 20):
     for col in range(1, 20):
-        for state in (None, Player.black, Player.white):
+        for state in (Player.black, Player.white):
             code = random.randint(0, MAX63)
             table[Point(row, col), state] = code
-            if state is None:
-                empty_board ^= code
 
 print('from .gotypes import Player, Point')
 print('')

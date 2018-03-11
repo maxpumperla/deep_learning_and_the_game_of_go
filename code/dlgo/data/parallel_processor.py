@@ -10,13 +10,13 @@ import numpy as np
 import multiprocessing
 from os import sys
 
-from ..gosgf import Sgf_game
-from ..goboard_fast import Board, GameState, Move
-from ..gotypes import Player, Point
-from .index_processor import KGSIndex
-from .sampling import Sampler
-from .generator import DataGenerator
-from ..encoders.base import get_encoder_by_name
+from dlgo.gosgf import Sgf_game
+from dlgo.goboard_fast import Board, GameState, Move
+from dlgo.gotypes import Player, Point
+from dlgo.data.index_processor import KGSIndex
+from dlgo.data.sampling import Sampler
+from dlgo.data.generator import DataGenerator
+from dlgo.encoders.base import get_encoder_by_name
 
 
 def worker(jobinfo):

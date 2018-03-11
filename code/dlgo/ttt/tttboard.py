@@ -1,6 +1,6 @@
 import copy
 
-from .ttttypes import Player, Point
+from dlgo.ttt.ttttypes import Player, Point
 
 __all__ = [
     'Board',

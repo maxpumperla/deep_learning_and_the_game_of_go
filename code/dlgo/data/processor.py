@@ -57,7 +57,7 @@ class GoDataProcessor():
 
 # <1> As `data_type` you can choose either 'train' or 'test'.
 # <2> `num_samples` refers to the number of games to load data from.
-# <3> We download all games from KGS to our local data directory.
+# <3> We download all games from KGS to our local data directory. If data is already available, it won't be downloaded again.
 # <4> The `Sampler` instance selects the specified number of games for a data type.
 # <5> We collect all zip file names contained in the data in a list.
 # <6> Then we group all SGF file indices by zip file name.

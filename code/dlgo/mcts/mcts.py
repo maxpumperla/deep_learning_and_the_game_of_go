@@ -1,12 +1,44 @@
 import math
 import random
 
-from .. import agent
-from ..gotypes import Player
+from dlgo import agent
+from dlgo.gotypes import Player
+from dlgo.utils import coords_from_point
 
 __all__ = [
     'MCTSAgent',
 ]
+
+
+def fmt(x):
+    if x is Player.black:
+        return 'B'
+    if x is Player.white:
+        return 'W'
+    if x.is_pass:
+        return 'pass'
+    if x.is_resign:
+        return 'resign'
+    return coords_from_point(x.point)
+
+
+def show_tree(node, indent='', max_depth=3):
+    if max_depth < 0:
+        return
+    if node is None:
+        return
+    if node.parent is None:
+        print('%sroot' % indent)
+    else:
+        player = node.parent.game_state.next_player
+        move = node.move
+        print('%s%s %s %d %.3f' % (
+            indent, fmt(player), fmt(move),
+            node.num_rollouts,
+            node.winning_pct(player),
+            ))
+    for child in sorted(node.children, key=lambda n: n.num_rollouts, reverse=True):
+        show_tree(child, indent + '  ', max_depth - 1)
 
 
 # tag::mcts-node[]

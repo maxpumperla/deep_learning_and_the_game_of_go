@@ -15,7 +15,7 @@ from math import isinf, isnan
 
 import six
 
-from . import sgf_grammar
+from dlgo.gosgf import sgf_grammar
 from six.moves import range
 
 # In python 2, indexing a str gives one-character strings.
@@ -518,6 +518,7 @@ def _make_property_type(type_name, allows_empty_list=False):
         globals()["serialise_" + type_name],
         uses_list=(type_name.endswith("_list")),
         allows_empty_list=allows_empty_list)
+
 
 _property_types_by_name = {
     'none': _make_property_type('none'),

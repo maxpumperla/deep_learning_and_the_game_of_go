@@ -29,5 +29,5 @@ def layers(input_shape):
     ]
 
 # <1> We use zero padding layers to enlarge input images.
-# <2> We specify that the input plane dimension for our features comes first.
+# <2> By using `channels_first` we specify that the input plane dimension for our features comes first.
 # end::small_network[]

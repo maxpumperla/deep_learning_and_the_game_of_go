@@ -1,7 +1,7 @@
 import enum
 import random
 
-from ..agent import Agent
+from dlgo.agent import Agent
 
 __all__ = [
     'MinimaxAgent',
@@ -65,6 +65,7 @@ def best_result(game_state):
             best_result_so_far = our_result
     return best_result_so_far
 # end::minimax-recursive-case[]
+
 
 # tag::minimax-agent[]
 class MinimaxAgent(Agent):

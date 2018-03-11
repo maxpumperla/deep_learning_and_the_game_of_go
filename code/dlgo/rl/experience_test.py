@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from . import experience
+from dlgo.rl import experience
 
 
 class ExperienceTest(unittest.TestCase):

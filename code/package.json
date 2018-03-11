@@ -1,0 +1,38 @@
+{
+  "name": "gtp2ogs",
+  "version": "5.2.0-beta.0",
+  "description": "Wrapper to allow Gnu Go Text Protocol speaking Go engines to connect to Online-Go.com and play games",
+  "main": "gtp2ogs.js",
+  "files": [
+    "gtp2ogs.js"
+  ],
+  "bin": {
+    "gtp2ogs": "gtp2ogs.js"
+  },
+  "dependencies": {
+    "socket.io-client": "=1.5.1",
+    "optimist": "=0.6.1",
+    "tracer": "=0.8.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/online-go/gtp2ogs.git"
+  },
+  "keywords": [
+    "gtp",
+    "ogs",
+    "online-go.com",
+    "go",
+    "baduk"
+  ],
+  "author": "Akita Noek <anoek@online-go.com> (https://online-go.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/online-go/gtp2ogs/issues"
+  },
+  "homepage": "https://github.com/online-go/gtp2ogs"
+}

@@ -4,9 +4,9 @@ from flask import Flask
 from flask import jsonify
 from flask import request
 
-from .. import goboard_fast as goboard
-from ..utils import coords_from_point
-from ..utils import point_from_coords
+from dlgo import goboard_fast as goboard
+from dlgo.utils import coords_from_point
+from dlgo.utils import point_from_coords
 
 __all__ = [
     'get_web_app',

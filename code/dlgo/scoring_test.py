@@ -1,8 +1,8 @@
 import unittest
 
-from . import scoring
-from .goboard import Board
-from .gotypes import Player, Point
+from dlgo import scoring
+from dlgo.goboard import Board
+from dlgo.gotypes import Player, Point
 
 
 class ScoringTest(unittest.TestCase):

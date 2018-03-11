@@ -1,8 +1,7 @@
-import enum
 import random
 
-from ..agent import Agent
-from ..gotypes import Player
+from dlgo.agent import Agent
+from dlgo.gotypes import Player
 
 __all__ = [
     'AlphaBetaAgent',

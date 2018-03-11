@@ -2,11 +2,11 @@ import numpy as np
 
 from keras.optimizers import SGD
 
-from .. import encoders
-from .. import goboard
-from .. import kerasutil
-from ..agent import Agent
-from ..agent.helpers import is_point_an_eye
+from dlgo import encoders
+from dlgo import goboard
+from dlgo import kerasutil
+from dlgo.agent import Agent
+from dlgo.agent.helpers import is_point_an_eye
 
 __all__ = [
     'ValueAgent',
@@ -50,7 +50,7 @@ class ValueAgent(Agent):
         if not moves:
             return goboard.Move.pass_turn()
 
-        num_moves = len(moves)
+        # num_moves = len(moves)
         board_tensors = np.array(board_tensors)
 
         # Values of the next state from opponent's view.
@@ -103,7 +103,7 @@ class ValueAgent(Agent):
         self.model.compile(loss='mse', optimizer=opt)
 
         n = experience.states.shape[0]
-        num_moves = self.encoder.num_points()
+        # num_moves = self.encoder.num_points()
         y = np.zeros((n,))
         for i in range(n):
             reward = experience.rewards[i]

@@ -1,7 +1,7 @@
-import enum
 import random
 
-from ..agent import Agent
+from dlgo.agent import Agent
+from dlgo.scoring import GameResult
 
 __all__ = [
     'DepthPrunedAgent',

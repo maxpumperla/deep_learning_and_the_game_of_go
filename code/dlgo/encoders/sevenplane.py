@@ -1,8 +1,8 @@
 # tag::sevenplane_init[]
 import numpy as np
 
-from .base import Encoder
-from ..goboard import Move, Point
+from dlgo.encoders.base import Encoder
+from dlgo.goboard import Move, Point
 
 
 class SevenPlaneEncoder(Encoder):

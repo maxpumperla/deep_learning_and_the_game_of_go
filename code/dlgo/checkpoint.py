@@ -6,7 +6,7 @@ from keras.models import Sequential
 from keras.optimizers import Adadelta
 from keras.layers.core import Dense, Activation
 
-from . import kerasutil
+from dlgo import kerasutil
 
 
 __all__ = [

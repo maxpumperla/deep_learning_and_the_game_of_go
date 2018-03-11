@@ -3,9 +3,9 @@ import random
 import numpy as np
 from scipy.optimize import minimize
 
-from . import scoring
-from .goboard import GameState
-from .gotypes import Player
+from dlgo import scoring
+from dlgo.goboard import GameState
+from dlgo.gotypes import Player
 
 __all__ = [
     'calculate_ratings',

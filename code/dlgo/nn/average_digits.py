@@ -1,7 +1,7 @@
 # tag::avg_imports[]
 import numpy as np
-from .load_mnist import load_data
-from .layers import sigmoid_double
+from dlgo.nn.load_mnist import load_data
+from dlgo.nn.layers import sigmoid_double
 # end::avg_imports[]
 
 

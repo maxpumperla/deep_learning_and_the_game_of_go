@@ -1,0 +1,7 @@
+# Template for your ~/.ssh/config
+Host aws
+  HostName <ip-address> # put the public IP of your AWS instance here
+  User ubuntu # for Ubuntu instances the user is usually ubuntu, this may vary
+  Port 22 # this specifies you're using port 22 so you can connect to your instance via ssh
+  IdentityFile <path-to-aws-key-pem> # put the full path of the AWS key (.pem file) you're using for this instance
+  LocalForward 8888 localhost:8888  # this is used to forward port 8888 from the AWS instance to your local machine so that you can use jupyter notebooks locally that connect against AWS

@@ -1,7 +1,7 @@
 import copy
-from .gotypes import Player, Point
-from .scoring import compute_game_result
-from . import zobrist
+from dlgo.gotypes import Player, Point
+from dlgo.scoring import compute_game_result
+from dlgo import zobrist
 
 __all__ = [
     'Board',
@@ -235,7 +235,7 @@ class Board():
         return isinstance(other, Board) and \
             self.num_rows == other.num_rows and \
             self.num_cols == other.num_cols and \
-            self._representation() == other._representation()
+            self._hash() == other._hash()
 
     def __deepcopy__(self, memodict={}):
         copied = Board(self.num_rows, self.num_cols)

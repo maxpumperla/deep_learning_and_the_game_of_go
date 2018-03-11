@@ -3,11 +3,11 @@ import numpy as np
 from keras import backend as K
 from keras.optimizers import SGD
 
-from .base import Agent
-from .helpers import is_point_an_eye
-from .. import encoders
-from .. import goboard
-from .. import kerasutil
+from dlgo.agent.base import Agent
+from dlgo.agent.helpers import is_point_an_eye
+from dlgo import encoders
+from dlgo import goboard
+from dlgo import kerasutil
 
 __all__ = [
     'PolicyAgent',
