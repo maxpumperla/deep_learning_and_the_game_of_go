@@ -1,4 +1,4 @@
-# Deep Learning and the Game of Go
+# Deep Learning and the Game of Go [![Build Status](https://travis-ci.org/maxpumperla/deep_learning_and_the_game_of_go.svg?branch=master)](https://travis-ci.org/maxpumperla/deep_learning_and_the_game_of_go)
 
 [Code](https://github.com/maxpumperla/deep_learning_and_the_game_of_go/tree/master/code), sample chapters and notebooks for the book "Deep Learning and the Game of Go" (Manning), available for early access [here](https://www.manning.com/books/deep-learning-and-the-game-of-go).
 
@@ -10,7 +10,7 @@ The book is all about getting you started to create your own bots. To make the e
 
 - **Chapter 4** A tiny tree search bot on a 5x5 board [here](https://www.badukai.com/demos/static/play_mcts_55.html).
 - **Chapter 7** A full 19x19 bot powered by a deep neural network trained to predict human moves [here](https://www.badukai.com/demos/static/play_predict_19.html)
-- **Chapter 9** A bot playing on a 9x9 board, using policy gradients, [here](https://www.badukai.com/demos/static/play_pg_99.html) 
+- **Chapter 9** A bot playing on a 9x9 board, using policy gradients, [here](https://www.badukai.com/demos/static/play_pg_99.html)
 
 These demos will be available in the [liveBook](https://www.manning.com/books/deep-learning-and-the-game-of-go) version of the book as well.
 
@@ -18,19 +18,28 @@ These demos will be available in the [liveBook](https://www.manning.com/books/de
 
 ## Table of Contents
 
-1. Towards deep learning: a machine learning introduction
-2. Machine learning for go
-3. Representing a game of go: a simple search bot
-4. Search and the early years of game AI
+1. Toward deep learning: a machine learning introduction
+2. Go as a machine learning problem
+3. Implementing your first Go bot
+4. Playing games with tree search
 5. Getting started with neural networks
 6. Designing a neural network for Go data
 7. Learning from data: a deep learning bot
-8. Enter deep reinforcement learning
-9. Reinforcement learning with the policy gradient algorithm
-10. Reinforcement learning with value methods
-11. Reinforcement with actor-critic methods
-12. AlphaGo: Combining approaches
-13. Bots in the wild: deployment and scale-out
+8. Deploying bots in the wild
+9. Enter deep reinforcement learning
+10. Reinforcement learning with policy gradients
+11. Reinforcement learning with value methods
+12. Reinforcement learning with actor-critic methods
+13. AlphaGo: Combining approaches
+14. AlphaGoZero and AlphaZero: Combining approaches
+
+Appendices
+
+- A. Mathematical foundations with Python
+- B. The backpropagation algorithm
+- C. Go programs and servers
+- D. Training and deploying bots using Amazon Web Services
+- E. Submitting a bot to the Online Go Server (OGS)
 
 ![chapter_succession](chapter_succession.png)
 
