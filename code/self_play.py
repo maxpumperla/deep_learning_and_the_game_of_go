@@ -76,7 +76,6 @@ def main():
     parser.add_argument('--num-games', '-n', type=int, default=10)
     parser.add_argument('--game-log-out', required=True)
     parser.add_argument('--experience-out', required=True)
-    parser.add_argument('--temperature', type=float, default=0.0)
 
     args = parser.parse_args()
 
@@ -89,8 +88,6 @@ def main():
     collector2 = rl.ExperienceCollector()
 
     color1 = Player.black
-    logf = open(args.game_log_out, 'a')
-    logf.write('Begin training at %s\n' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),))
     for i in range(args.num_games):
         print('Simulating game %d/%d...' % (i + 1, args.num_games))
         collector1.begin_episode()
