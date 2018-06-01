@@ -10,7 +10,6 @@ from dlgo import rl
 from dlgo.goboard_fast import GameState, Player, Point
 
 
-BOARD_SIZE = 9
 COLS = 'ABCDEFGHJKLMNOPQRST'
 STONE_TO_CHAR = {
     None: '.',
@@ -55,8 +54,6 @@ def simulate_game(black_player, white_player):
     while not game.is_over():
         next_move = agents[game.next_player].select_move(game)
         moves.append(next_move)
-        # if next_move.is_pass:
-        #     print('%s passes' % name(game.next_player))
         game = game.apply_move(next_move)
 
     print_board(game.board)
@@ -72,47 +69,40 @@ def simulate_game(black_player, white_player):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--board-size', type=int, required=True)
     parser.add_argument('--learning-agent', required=True)
     parser.add_argument('--num-games', '-n', type=int, default=10)
-    parser.add_argument('--game-log-out', required=True)
     parser.add_argument('--experience-out', required=True)
 
     args = parser.parse_args()
+    agent_filename = args.learning_agent
+    experience_filename = args.experience_out
+    num_games = args.num_games
+    global BOARD_SIZE
+    BOARD_SIZE = args.board_size
 
-    agent1 = agent.load_policy_agent(h5py.File(args.learning_agent))
-    agent2 = agent.load_policy_agent(h5py.File(args.learning_agent))
-    agent1.set_temperature(args.temperature)
-    agent2.set_temperature(args.temperature)
-
+    agent1 = agent.load_policy_agent(h5py.File(agent_filename))
+    agent2 = agent.load_policy_agent(h5py.File(agent_filename))
     collector1 = rl.ExperienceCollector()
     collector2 = rl.ExperienceCollector()
+    agent1.set_collector(collector1)
+    agent2.set_collector(collector2)
 
-    color1 = Player.black
     for i in range(args.num_games):
         print('Simulating game %d/%d...' % (i + 1, args.num_games))
         collector1.begin_episode()
-        agent1.set_collector(collector1)
         collector2.begin_episode()
-        agent2.set_collector(collector2)
 
-        if color1 == Player.black:
-            black_player, white_player = agent1, agent2
-        else:
-            white_player, black_player = agent2, agent1
-        game_record = simulate_game(black_player, white_player)
-        if game_record.winner == color1:
-            print('Agent 1 wins.')
+        game_record = simulate_game(agent1, agent2)
+        if game_record.winner == Player.black:
             collector1.complete_episode(reward=1)
             collector2.complete_episode(reward=-1)
         else:
-            print('Agent 2 wins.')
             collector2.complete_episode(reward=1)
             collector1.complete_episode(reward=-1)
-        color1 = color1.other
 
     experience = rl.combine_experience([collector1, collector2])
-    logf.write('Saving experience buffer to %s\n' % args.experience_out)
-    with h5py.File(args.experience_out, 'w') as experience_outf:
+    with h5py.File(experience_filename, 'w') as experience_outf:
         experience.serialize(experience_outf)
 
 
