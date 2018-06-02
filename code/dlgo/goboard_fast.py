@@ -283,6 +283,21 @@ class Move():
             return 'resign'
         return '(r %d, c %d)' % (self.point.row, self.point.col)
 
+    # Need these so that a Move can be a valid dictionary key.
+    def __hash__(self):
+        return hash((
+            self.is_pass,
+            self.is_resign,
+            self.is_play,
+            self.point))
+
+    def __eq__(self, other):
+        return (isinstance(other, Move)) and \
+            self.is_pass == other.is_pass and \
+            self.is_resign == other.is_resign and \
+            self.is_play == other.is_play and \
+            self.point == other.point
+
 
 class GameState():
     def __init__(self, board, next_player, previous, move):
