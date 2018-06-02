@@ -23,10 +23,12 @@ class ExperienceCollector(object):
         self._current_episode_actions = []
         self._current_episode_estimated_values = []
 
-    def record_decision(self, state, action, estimated_value=0):
+    def record_decision(self, state, action,
+            estimated_value=0):
         self._current_episode_states.append(state)
         self._current_episode_actions.append(action)
-        self._current_episode_estimated_values.append(estimated_value)
+        self._current_episode_estimated_values.append(
+            estimated_value)
 
     def complete_episode(self, reward):
         num_states = len(self._current_episode_states)
@@ -35,7 +37,8 @@ class ExperienceCollector(object):
         self.rewards += [reward for _ in range(num_states)]
 
         for i in range(num_states):
-            advantage = reward - self._current_episode_estimated_values[i]
+            advantage = reward - \
+                self._current_episode_estimated_values[i]
             self.advantages.append(advantage)
 
         self._current_episode_states = []
@@ -59,9 +62,12 @@ class ExperienceBuffer(object):
 
 
 def combine_experience(collectors):
-    combined_states = np.concatenate([np.array(c.states) for c in collectors])
-    combined_actions = np.concatenate([np.array(c.actions) for c in collectors])
-    combined_rewards = np.concatenate([np.array(c.rewards) for c in collectors])
+    combined_states = np.concatenate(
+        [np.array(c.states) for c in collectors])
+    combined_actions = np.concatenate(
+        [np.array(c.actions) for c in collectors])
+    combined_rewards = np.concatenate(
+        [np.array(c.rewards) for c in collectors])
     combined_advantages = np.concatenate([
         np.array(c.advantages) for c in collectors])
 

@@ -18,9 +18,6 @@ def main():
     encoder = encoders.get_encoder_by_name('simple', args.board_size)
 
     board_input = Input(shape=encoder.shape(), name='board_input')
-    action_input = Input(
-        shape=(encoder.num_points(),),
-        name='action_input')
 
     conv1a = ZeroPadding2D((2, 2))(board_input)
     conv1b = Conv2D(64, (5, 5), activation='relu')(conv1a)
@@ -31,14 +28,23 @@ def main():
     flat = Flatten()(conv2b)
     processed_board = Dense(512)(flat)
 
-    board_plus_action = concatenate([action_input, processed_board])
-    hidden_layer = Dense(256, activation='relu')(board_plus_action)
-    value_output = Dense(1, activation='tanh')(hidden_layer)
+    policy_hidden_layer = Dense(
+        512, activation='relu')(processed_board)
+    policy_output = Dense(
+        encoder.num_points(), activation='softmax')(
+        policy_hidden_layer)
 
-    model = Model(inputs=[board_input, action_input],
-                  outputs=value_output)
+    value_hidden_layer = Dense(
+        512, activation='relu')(
+        processed_board)
+    value_output = Dense(1, activation='tanh')(
+        value_hidden_layer)
 
-    new_agent = rl.QAgent(model, encoder)
+    model = Model(inputs=board_input,
+                  outputs=[policy_output, value_output])
+
+
+    new_agent = rl.ACAgent(model, encoder)
     with h5py.File(args.output_file, 'w') as outf:
         new_agent.serialize(outf)
 

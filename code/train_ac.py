@@ -21,7 +21,7 @@ def main():
     learning_rate = args.lr
     batch_size = args.bs
 
-    learning_agent = rl.load_q_agent(h5py.File(learning_agent_filename))
+    learning_agent = rl.load_ac_agent(h5py.File(learning_agent_filename))
     for exp_filename in experience_files:
         exp_buffer = rl.load_experience(h5py.File(exp_filename))
         learning_agent.train(
