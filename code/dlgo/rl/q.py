@@ -15,12 +15,11 @@ __all__ = [
 
 
 class QAgent(Agent):
-    def __init__(self, model, encoder, policy='eps-greedy'):
+    def __init__(self, model, encoder):
         self.model = model
         self.encoder = encoder
         self.collector = None
         self.temperature = 0.0
-        self.policy = policy
 
         self.last_move_value = 0
 
@@ -30,15 +29,9 @@ class QAgent(Agent):
     def set_collector(self, collector):
         self.collector = collector
 
-    def set_policy(self, policy):
-        if policy not in ('eps-greedy', 'weighted'):
-            raise ValueError(policy)
-        self.policy = policy
-
     def select_move(self, game_state):
         board_tensor = self.encoder.encode(game_state)
 
-        # Loop over all legal moves.
         moves = []
         board_tensors = []
         for move in game_state.legal_moves():
@@ -51,20 +44,20 @@ class QAgent(Agent):
 
         num_moves = len(moves)
         board_tensors = np.array(board_tensors)
-        move_vectors = np.zeros((num_moves, self.encoder.num_points()))
+        move_vectors = np.zeros(
+            (num_moves, self.encoder.num_points()))
         for i, move in enumerate(moves):
             move_vectors[i][move] = 1
 
-        values = self.model.predict([board_tensors, move_vectors])
+        values = self.model.predict(
+            [board_tensors, move_vectors])
         values = values.reshape(len(moves))
 
-        if self.policy == 'eps-greedy':
-            ranked_moves = self.rank_moves_eps_greedy(values)
-        elif self.policy == 'weighted':
-            ranked_moves = self.rank_moves_weighted(values)
+        ranked_moves = self.rank_moves_eps_greedy(values)
 
         for move_idx in ranked_moves:
-            point = self.encoder.decode_point_index(moves[move_idx])
+            point = self.encoder.decode_point_index(
+                moves[move_idx])
             if not is_point_an_eye(game_state.board,
                                    point,
                                    game_state.next_player):
@@ -75,7 +68,6 @@ class QAgent(Agent):
                     )
                 self.last_move_value = float(values[move_idx])
                 return goboard.Move.play(point)
-        # No legal, non-self-destructive moves less.
         return goboard.Move.pass_turn()
 
     def rank_moves_eps_greedy(self, values):
@@ -85,16 +77,6 @@ class QAgent(Agent):
         ranked_moves = np.argsort(values)
         # Return them in best-to-worst order.
         return ranked_moves[::-1]
-
-    def rank_moves_weighted(self, values):
-        p = values / np.sum(values)
-        p = np.power(p, 1.0 / self.temperature)
-        p = p / np.sum(p)
-        return np.random.choice(
-            np.arange(0, len(values)),
-            size=len(values),
-            p=p,
-            replace=False)
 
     def train(self, experience, lr=0.1, batch_size=128):
         opt = SGD(lr=lr)
@@ -108,7 +90,7 @@ class QAgent(Agent):
             action = experience.actions[i]
             reward = experience.rewards[i]
             actions[i][action] = 1
-            y[i] = 1 if reward > 0 else 0
+            y[i] = reward
 
         self.model.fit(
             [experience.states, actions], y,
