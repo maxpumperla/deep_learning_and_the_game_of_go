@@ -35,6 +35,7 @@ def main():
 
     bot = minimax.MinimaxAgent()
 
+    print('Enter your moves in a (col)(row) format, e.g. "A2"')
     while not game.is_over():
         print_board(game.board)
         if game.next_player == human_player:
