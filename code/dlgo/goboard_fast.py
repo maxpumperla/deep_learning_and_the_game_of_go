@@ -9,6 +9,8 @@ __all__ = [
     'Move',
 ]
 
+# We precompute all the neighbors and diagonally adjacent points from
+# each point. This saves time allocating many Point objects.
 neighbor_tables = {}
 corner_tables = {}
 
@@ -238,6 +240,8 @@ class Board():
             self._representation() == other._representation()
 
     def __deepcopy__(self, memodict={}):
+        # Override the default deepcopy implementation to avoid some
+        # unnecessary copies.
         copied = Board(self.num_rows, self.num_cols)
         # Can do a shallow copy b/c the dictionary maps tuples
         # (immutable) to GoStrings (also immutable)
@@ -325,6 +329,9 @@ class GameState():
     def does_move_violate_ko(self, player, move):
         if not move.is_play:
             return False
+        # We only need to do the ko check if the move makes a capture.
+        # We don't actually need compute the next state to test if the
+        # move will capture.
         if not self.board.will_capture(player, move.point):
             return False
         next_board = copy.deepcopy(self.board)
