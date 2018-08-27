@@ -1,18 +1,23 @@
-# tag::mse[]
 from __future__ import print_function
+from six.moves import range
+# tag::mse[]
 import random
 import numpy as np
-from six.moves import range
 
 
-class MSE():  # <1>
+class MSE:  # <1>
 
-    def loss_function(self, predictions, labels):
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def loss_function(predictions, labels):
         diff = predictions - labels
         return 0.5 * sum(diff * diff)[0]  # <2>
 
-    def loss_derivative(self, predictions, labels):
-        return (predictions - labels)
+    @staticmethod
+    def loss_derivative(predictions, labels):
+        return predictions - labels
 
 # <1> We use mean squared error as our loss function.
 # <2> By defining MSE as 0.5 times the square difference between predictions and labels...
@@ -21,11 +26,11 @@ class MSE():  # <1>
 
 
 # tag::sequential_init[]
-class SequentialNetwork():  # <1>
+class SequentialNetwork:  # <1>
     def __init__(self, loss=None):
         print("Initialize Network...")
         self.layers = []
-        if loss == None:
+        if loss is None:
             self.loss = MSE()  # <2>
 
 # <1> In a sequential neural network we stack layers sequentially.

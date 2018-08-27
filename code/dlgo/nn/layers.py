@@ -1,5 +1,5 @@
-# tag::imports[]
 from __future__ import print_function
+# tag::imports[]
 import numpy as np
 # end::imports[]
 
@@ -25,14 +25,7 @@ def sigmoid_prime(z):
 
 
 # tag::layer[]
-class Layer(object):  # <1>
-    '''
-     and its
-     Each layer has a forward function
-    that emits output data from input data and a backward
-    function that emits an output delta, i.e. a gradient,
-    from an input delta.
-    '''
+class Layer:  # <1>
     def __init__(self):
         self.params = []
 
@@ -63,7 +56,7 @@ class Layer(object):  # <1>
         raise NotImplementedError
 
     def get_forward_input(self):  # <2>
-        if self.previous != None:
+        if self.previous is not None:
             return self.previous.output_data
         else:
             return self.input_data
@@ -72,7 +65,7 @@ class Layer(object):  # <1>
         raise NotImplementedError
 
     def get_backward_input(self):  # <4>
-        if self.next != None:
+        if self.next is not None:
             return self.next.output_delta
         else:
             return self.input_delta
