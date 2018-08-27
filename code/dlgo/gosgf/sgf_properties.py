@@ -99,7 +99,7 @@ def serialise_go_point(move, size):
     return col_s + row_s
 
 
-class _Context(object):
+class _Context:
     def __init__(self, size, encoding):
         self.size = size
         self.encoding = encoding
@@ -502,7 +502,7 @@ def serialise_LB_list(values, context):
             for point, text in values]
 
 
-class Property_type(object):
+class Property_type:
     """Description of a property type."""
     def __init__(self, interpreter, serialiser, uses_list,
                  allows_empty_list=False):

@@ -22,13 +22,22 @@ Only supports 19x19 boards and fixed handicaps.
 """
 
 # tag::gtp_frontend_init[]
-HANDICAP_STONES = ['D4', 'Q16', 'D16', 'Q4', 'D10', 'Q10', 'K4', 'K16', 'K10']
+HANDICAP_STONES = {
+    2: ['D4', 'Q16'],
+    3: ['D4', 'Q16', 'D16'],
+    4: ['D4', 'Q16', 'D16', 'Q4'],
+    5: ['D4', 'Q16', 'D16', 'Q4', 'K10'],
+    6: ['D4', 'Q16', 'D16', 'Q4', 'D10', 'Q10'],
+    7: ['D4', 'Q16', 'D16', 'Q4', 'D10', 'Q10', 'K10'],
+    8: ['D4', 'Q16', 'D16', 'Q4', 'D10', 'Q10', 'K4', 'K16'],
+    9: ['D4', 'Q16', 'D16', 'Q4', 'D10', 'Q10', 'K4', 'K16', 'K10'],
+}
 
 
-class GTPFrontend(object):
+class GTPFrontend:
 
-    def __init__(self, agent, termination=None):
-        self.agent = TerminationAgent(agent, termination)
+    def __init__(self, termination_agent, termination=None):
+        self.agent = termination_agent
         self.game_state = GameState.new_game(19)
         self._input = sys.stdin
         self._output = sys.stdout
@@ -59,9 +68,9 @@ class GTPFrontend(object):
             self._output.write(response.serialize(cmd, resp))
             self._output.flush()
 
-    def process(self, command):
-        handler = self.handlers.get(command.name, self.handle_unknown)
-        return handler(*command.args)
+    def process(self, cmd):
+        handler = self.handlers.get(cmd.name, self.handle_unknown)
+        return handler(*cmd.args)
 # end::gtp_frontend_run[]
 
 # tag::gtp_frontend_commands[]
@@ -85,10 +94,11 @@ class GTPFrontend(object):
 
     def handle_fixed_handicap(self, nstones):
         nstones = int(nstones)
-        for stone in HANDICAP_STONES[:nstones]:
-            self.game_state = self.game_state.apply_move(gtp_position_to_coords(stone))
+        for stone in HANDICAP_STONES[nstones]:
+            self.game_state = self.game_state.apply_move(
+                gtp_position_to_coords(stone))
         return response.success()
-# tag::gtp_frontend_commands[]
+# end::gtp_frontend_commands[]
 
     def handle_quit(self):
         self._stopped = True
@@ -99,7 +109,7 @@ class GTPFrontend(object):
         return response.success()
 
     def handle_known_command(self, command_name):
-        return response.bool_response(command_name in self.handler.keys())
+        return response.bool_response(command_name in self.handlers.keys())
 
     def handle_boardsize(self, size):
         if int(size) != 19:

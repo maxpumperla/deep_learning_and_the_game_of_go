@@ -17,18 +17,18 @@ from dlgo.scoring import compute_game_result
 
 
 # tag::play_local_init[]
-class LocalGtpBot():
+class LocalGtpBot:
 
-    def __init__(self, agent, termination=None, handicap=0,
+    def __init__(self, go_bot, termination=None, handicap=0,
                  opponent='gnugo', output_sgf="out.sgf",
                  our_color='b'):
-        self.bot = TerminationAgent(agent, termination)  # <1>
+        self.bot = TerminationAgent(go_bot, termination)  # <1>
         self.handicap = handicap
         self._stopped = False  # <2>
         self.game_state = GameState.new_game(19)
         self.sgf = SGFWriter(output_sgf)  # <3>
 
-        self.our_color = Player.black if 'b' else Player.white
+        self.our_color = Player.black if our_color == 'b' else Player.white
         self.their_color = self.our_color.other
 
         cmd = self.opponent_cmd(opponent)  # <4>
@@ -37,7 +37,8 @@ class LocalGtpBot():
             cmd, stdin=pipe, stdout=pipe  # <5>
         )
 
-    def opponent_cmd(self, opponent):
+    @staticmethod
+    def opponent_cmd(opponent):
         if opponent == 'gnugo':
             return ["gnugo", "--mode", "gtp"]
         elif opponent == 'pachi':
@@ -58,7 +59,7 @@ class LocalGtpBot():
     def get_response(self):
         succeeded = False
         result = ''
-        while succeeded == False:
+        while not succeeded:
             line = self.gtp_stream.stdout.readline()
             if line[0] == '=':
                 succeeded = True
@@ -79,7 +80,7 @@ class LocalGtpBot():
         self.sgf.write_sgf()
 
     def set_handicap(self):
-        if(self.handicap == 0):
+        if self.handicap == 0:
             self.command_and_response("komi 7.5\n")
             self.sgf.append("KM[7.5]\n")
         else:
@@ -95,7 +96,7 @@ class LocalGtpBot():
 # tag::play_local_play[]
     def play(self):
         while not self._stopped:
-            if(self.game_state.next_player == self.our_color):
+            if self.game_state.next_player == self.our_color:
                 self.play_our_move()
             else:
                 self.play_their_move()
@@ -130,10 +131,10 @@ class LocalGtpBot():
         their_letter = their_name[0].upper()
 
         pos = self.command_and_response("genmove {}\n".format(their_name))
-        if(pos.lower() == 'resign'):
+        if pos.lower() == 'resign':
             self.game_state = self.game_state.apply_move(Move.resign())
             self._stopped = True
-        elif(pos.lower() == 'pass'):
+        elif pos.lower() == 'pass':
             self.game_state = self.game_state.apply_move(Move.pass_turn())
             self.sgf.append(";{}[]\n".format(their_letter))
             if self.game_state.last_move.is_pass:
@@ -146,7 +147,7 @@ class LocalGtpBot():
 
 
 if __name__ == "__main__":
-    agent = load_prediction_agent(h5py.File("../../agents/betago.hdf5", "r"))
-    gnu_go = LocalGtpBot(agent=agent, termination=PassWhenOpponentPasses(),
+    bot = load_prediction_agent(h5py.File("../../agents/betago.hdf5", "r"))
+    gnu_go = LocalGtpBot(go_bot=bot, termination=PassWhenOpponentPasses(),
                          handicap=0, opponent='pachi', )
     gnu_go.run()

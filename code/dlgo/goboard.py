@@ -17,7 +17,7 @@ class IllegalMoveError(Exception):
 
 
 # tag::fast_go_strings[]
-class GoString():
+class GoString:
     def __init__(self, color, stones, liberties):
         self.color = color
         self.stones = frozenset(stones)
@@ -59,7 +59,7 @@ class GoString():
 
 
 # tag::init_zobrist[]
-class Board():
+class Board:
     def __init__(self, num_rows, num_cols):
         self.num_rows = num_rows
         self.num_cols = num_cols
@@ -180,7 +180,7 @@ class Board():
 # end::return_zobrist[]
 
 
-class Move():
+class Move:
     """Any action a player can play on a turn.
     Exactly one of is_play, is_pass, is_resign will be set.
     """
@@ -213,7 +213,7 @@ class Move():
 
 
 # tag::init_state_zobrist[]
-class GameState():
+class GameState:
     def __init__(self, board, next_player, previous, move):
         self.board = board
         self.next_player = next_player

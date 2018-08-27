@@ -7,7 +7,7 @@ from dlgo.gotypes import Player, Point
 
 
 # tag::scoring_territory[]
-class Territory(object):
+class Territory:
     def __init__(self, territory_map):  # <1>
         self.num_black_territory = 0
         self.num_white_territory = 0

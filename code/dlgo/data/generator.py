@@ -4,7 +4,7 @@ import numpy as np
 from keras.utils import to_categorical
 
 
-class DataGenerator(object):
+class DataGenerator:
     def __init__(self, data_directory, samples):
         self.data_directory = data_directory
         self.samples = samples
@@ -30,14 +30,14 @@ class DataGenerator(object):
             base = self.data_directory + '/' + file_name + '_features_*.npy'
             for feature_file in glob.glob(base):
                 label_file = feature_file.replace('features', 'labels')
-                X = np.load(feature_file)
+                x = np.load(feature_file)
                 y = np.load(label_file)
-                X = X.astype('float32')
+                x = x.astype('float32')
                 y = to_categorical(y.astype(int), num_classes)
-                while X.shape[0] >= batch_size:
-                    X_batch, X = X[:batch_size], X[batch_size:]
+                while x.shape[0] >= batch_size:
+                    x_batch, x = x[:batch_size], x[batch_size:]
                     y_batch, y = y[:batch_size], y[batch_size:]
-                    yield X_batch, y_batch  # <1>
+                    yield x_batch, y_batch  # <1>
 
 # <1> We return or "yield" batches of data as we go.
 # end::private_generate[]
