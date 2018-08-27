@@ -1,7 +1,10 @@
+import numpy as np
 # tag::imports[]
 import copy
-from .gotypes import Player
+from dlgo.gotypes import Player
 # end::imports[]
+from dlgo.gotypes import Point
+from dlgo.scoring import compute_game_result
 
 __all__ = [
     'Board',
@@ -55,6 +58,7 @@ class Board():  # <1>
         self.num_rows = num_rows
         self.num_cols = num_cols
         self._grid = {}
+
 # <1> A board is initialized as empty grid with the specified number of rows and columns.
 # end::board_init[]
 
@@ -170,15 +174,13 @@ class GameState():
         self.previous_state = previous
         self.last_move = move
 
-    def apply_move(self, player, move):  # <1>
-        if player != self.next_player:
-            raise ValueError(player)
+    def apply_move(self, move):  # <1>
         if move.is_play:
             next_board = copy.deepcopy(self.board)
-            next_board.place_stone(player, move.point)
+            next_board.place_stone(self.next_player, move.point)
         else:
             next_board = self.board
-        return GameState(next_board, player.other, self, move)
+        return GameState(next_board, self.next_player.other, self, move)
 
     @classmethod
     def new_game(cls, board_size):
@@ -241,3 +243,24 @@ class GameState():
             return False
         return self.last_move.is_pass and second_last_move.is_pass
 # end::is_over[]
+
+    def legal_moves(self):
+        moves = []
+        for row in range(1, self.board.num_rows + 1):
+            for col in range(1, self.board.num_cols + 1):
+                move = Move.play(Point(row, col))
+                if self.is_valid_move(move):
+                    moves.append(move)
+        # These two moves are always legal.
+        moves.append(Move.pass_turn())
+        moves.append(Move.resign())
+
+        return moves
+
+    def winner(self):
+        if not self.is_over():
+            return None
+        if self.last_move.is_resign:
+            return self.next_player
+        game_result = compute_game_result(self)
+        return game_result.winner

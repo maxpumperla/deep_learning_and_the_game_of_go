@@ -1,7 +1,8 @@
 import copy
-from .gotypes import Player, Point
-from .scoring import compute_game_result
-from . import zobrist
+from dlgo.gotypes import Player, Point
+from dlgo.scoring import compute_game_result
+from dlgo import zobrist
+from dlgo.utils import MoveAge
 
 __all__ = [
     'Board',
@@ -105,6 +106,8 @@ class Board():
             init_corner_table(dim)
         self.neighbor_table = neighbor_tables[dim]
         self.corner_table = corner_tables[dim]
+        self.move_ages = MoveAge(self)
+
 
     def neighbors(self, point):
         return self.neighbor_table[point]
@@ -121,6 +124,8 @@ class Board():
         adjacent_same_color = []
         adjacent_opposite_color = []
         liberties = []
+        self.move_ages.increment_all()
+        self.move_ages.add(point)
         for neighbor in self.neighbor_table[point]:
             neighbor_string = self._grid.get(neighbor)
             if neighbor_string is None:
@@ -161,6 +166,7 @@ class Board():
 
     def _remove_string(self, string):
         for point in string.stones:
+            self.move_ages.reset_age(point)
             # Removing a string can create liberties for other strings.
             for neighbor in self.neighbor_table[point]:
                 neighbor_string = self._grid.get(neighbor)
@@ -235,7 +241,7 @@ class Board():
         return isinstance(other, Board) and \
             self.num_rows == other.num_rows and \
             self.num_cols == other.num_cols and \
-            self._representation() == other._representation()
+            self._hash() == other._hash()
 
     def __deepcopy__(self, memodict={}):
         copied = Board(self.num_rows, self.num_cols)
@@ -282,6 +288,24 @@ class Move():
         if self.is_resign:
             return 'resign'
         return '(r %d, c %d)' % (self.point.row, self.point.col)
+
+    def __hash__(self):
+        return hash((
+            self.is_play,
+            self.is_pass,
+            self.is_resign,
+            self.point))
+
+    def  __eq__(self, other):
+        return (
+            self.is_play,
+            self.is_pass,
+            self.is_resign,
+            self.point) == (
+            other.is_play,
+            other.is_pass,
+            other.is_resign,
+            other.point)
 
 
 class GameState():

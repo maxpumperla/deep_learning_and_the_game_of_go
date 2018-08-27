@@ -11,7 +11,7 @@ from dlgo.utils import print_board, print_move
 
 # tag::generate_mcts[]
 def generate_game(board_size, rounds, max_moves, temperature):
-    boards = [], moves = []  # <1>
+    boards, moves = [], []  # <1>
 
     encoder = get_encoder_by_name('oneplane', board_size)  # <2>
 
@@ -63,25 +63,26 @@ def main():
     parser.add_argument('--move-out')
 
     args = parser.parse_args()  # <1>
-    Xs = [], ys = []
+    xs = []
+    ys = []
 
     for i in range(args.num_games):
         print('Generating game %d/%d...' % (i + 1, args.num_games))
-        X, y = generate_game(args.board_size, args.rounds, args.max_moves, args.temperature)  # <2>
-        Xs.append(X)
+        x, y = generate_game(args.board_size, args.rounds, args.max_moves, args.temperature)  # <2>
+        xs.append(x)
         ys.append(y)
 
-    X = np.concatenate(Xs)  # <3>
+    x = np.concatenate(xs)  # <3>
     y = np.concatenate(ys)
 
-    np.save(args.board_out, X)  # <4>
+    np.save(args.board_out, x)  # <4>
     np.save(args.move_out, y)
 
 
 if __name__ == '__main__':
     main()
 
-# <1> We first pass command line arguments to run this application.
+# <1> This application allows some customization via command line arguments.
 # <2> For the specified number of games we generate game data.
 # <3> After all games have been generated, we concatenate features and labels, respectively.
 # <4> We store feature and label data to separate files, as specified by the command line options.
