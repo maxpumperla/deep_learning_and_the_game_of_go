@@ -1,8 +1,8 @@
 # Deep Learning and the Game of Go [![Build Status](https://travis-ci.org/maxpumperla/deep_learning_and_the_game_of_go.svg?branch=master)](https://travis-ci.org/maxpumperla/deep_learning_and_the_game_of_go)
 
-[Code](https://github.com/maxpumperla/deep_learning_and_the_game_of_go/tree/master/code), sample chapters and notebooks for the book "Deep Learning and the Game of Go" (Manning), available for early access [here](https://www.manning.com/books/deep-learning-and-the-game-of-go).
+This repository is first and foremost a comprehensive machine learning framework for the game of Go, focussing on deep learning techniques. What you'll find here is a library that builds up from the game-play basics to very advanced techniques. In particular, you find code **for early approaches in game AI, intermediate techniques using deep learning, to implementations of AlphaGo and AlphaGo Zero - all presented in one common framework**.
 
-If you're following the code samples from the book, check out the branches for
+On the other hand, this repository at the same time contains [Code](https://github.com/maxpumperla/deep_learning_and_the_game_of_go/tree/master/code), and sample chapters for the book "Deep Learning and the Game of Go" (Manning), available for early access [here](https://www.manning.com/books/deep-learning-and-the-game-of-go), which ties into the library and teaches its components bit by biy. If you're following the code samples from the book, check out the branches for
 individual chapters.
 
 ![dl_go_cover](dl_go_cover.jpg)
