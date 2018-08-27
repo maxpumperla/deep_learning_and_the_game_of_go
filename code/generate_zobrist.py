@@ -4,10 +4,10 @@ import random
 from dlgo.gotypes import Player, Point
 
 
-def to_python(state):
-    if state is None:
+def to_python(player_state):
+    if player_state is None:
         return 'None'
-    if state == Player.black:
+    if player_state == Player.black:
         return Player.black
     return Player.white
 
@@ -18,11 +18,9 @@ table = {}
 empty_board = 0
 for row in range(1, 20):
     for col in range(1, 20):
-        for state in (None, Player.black, Player.white):
+        for state in (Player.black, Player.white):
             code = random.randint(0, MAX63)
             table[Point(row, col), state] = code
-            if state is None:
-                empty_board ^= code
 
 print('from .gotypes import Player, Point')
 print('')

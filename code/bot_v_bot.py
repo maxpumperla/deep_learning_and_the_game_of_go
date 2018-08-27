@@ -11,8 +11,8 @@ def main():
     board_size = 9
     game = goboard.GameState.new_game(board_size)
     bots = {
-        gotypes.Player.black: agent.RandomBot(),
-        gotypes.Player.white: agent.RandomBot(),
+        gotypes.Player.black: agent.naive.RandomBot(),
+        gotypes.Player.white: agent.naive.RandomBot(),
     }
     while not game.is_over():
         time.sleep(0.3)  # <1>

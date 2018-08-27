@@ -1,4 +1,4 @@
-from ..gotypes import Point
+from dlgo.gotypes import Point
 
 __all__ = [
     'is_point_an_eye',
