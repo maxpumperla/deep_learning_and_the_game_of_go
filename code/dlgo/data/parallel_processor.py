@@ -9,14 +9,15 @@ import shutil
 import numpy as np
 import multiprocessing
 from os import sys
+from keras.utils import to_categorical
 
-from ..gosgf import Sgf_game
-from ..goboard_fast import Board, GameState, Move
-from ..gotypes import Player, Point
-from .index_processor import KGSIndex
-from .sampling import Sampler
-from .generator import DataGenerator
-from ..encoders.base import get_encoder_by_name
+from dlgo.gosgf import Sgf_game
+from dlgo.goboard_fast import Board, GameState, Move
+from dlgo.gotypes import Player, Point
+from dlgo.data.index_processor import KGSIndex
+from dlgo.data.sampling import Sampler
+from dlgo.data.generator import DataGenerator
+from dlgo.encoders.base import get_encoder_by_name
 
 
 def worker(jobinfo):
@@ -27,7 +28,7 @@ def worker(jobinfo):
         raise Exception('>>> Exiting child process.')
 
 
-class GoDataProcessor():
+class GoDataProcessor:
     def __init__(self, encoder='simple', data_directory='data'):
         self.encoder_string = encoder
         self.encoder = get_encoder_by_name(encoder, 19)
@@ -72,7 +73,7 @@ class GoDataProcessor():
         total_examples = self.num_total_examples(zip_file, game_list, name_list)
 
         shape = self.encoder.shape()
-        feature_shape = np.insert(shape, 0, total_examples)
+        feature_shape = np.insert(shape, 0, np.asarray([total_examples]))
         features = np.zeros(feature_shape)
         labels = np.zeros((total_examples,))
 
@@ -88,6 +89,7 @@ class GoDataProcessor():
 
             for item in sgf.main_sequence_iter():
                 color, move_tuple = item.get_move()
+                point = None
                 if color is not None:
                     if move_tuple is not None:
                         row, col = move_tuple
@@ -95,7 +97,7 @@ class GoDataProcessor():
                         move = Move.play(point)
                     else:
                         move = Move.pass_turn()
-                    if first_move_done:
+                    if first_move_done and point is not None:
                         features[counter] = self.encoder.encode(game_state)
                         labels[counter] = self.encoder.encode_point(point)
                         counter += 1
@@ -118,8 +120,6 @@ class GoDataProcessor():
 
     def consolidate_games(self, name, samples):
         files_needed = set(file_name for file_name, index in samples)
-        print('>>> Total number of files: ' + str(len(files_needed)))
-
         file_names = []
         for zip_file_name in files_needed:
             file_name = zip_file_name.replace('.tar.gz', '') + name
@@ -130,14 +130,14 @@ class GoDataProcessor():
         for file_name in file_names:
             file_prefix = file_name.replace('.tar.gz', '')
             base = self.data_dir + '/' + file_prefix + '_features_*.npy'
-            print(base)
             for feature_file in glob.glob(base):
-                print(feature_file)
-                X = np.load(feature_file)
-                y = np.load(feature_file)
-                feature_list.append(X)
+                label_file = feature_file.replace('features', 'labels')
+                x = np.load(feature_file)
+                y = np.load(label_file)
+                x = x.astype('float32')
+                y = to_categorical(y.astype(int), 19 * 19)
+                feature_list.append(x)
                 label_list.append(y)
-        print('>>> Done')
 
         features = np.concatenate(feature_list, axis=0)
         labels = np.concatenate(label_list, axis=0)
@@ -150,11 +150,13 @@ class GoDataProcessor():
 
         return features, labels
 
-    def get_handicap(self, sgf):  # Get handicap stones
+    @staticmethod
+    def get_handicap(sgf):  # Get handicap stones
         go_board = Board(19, 19)
         first_move_done = False
+        move = None
         game_state = GameState.new_game(19)
-        if sgf.get_handicap() != None and sgf.get_handicap() != 0:
+        if sgf.get_handicap() is not None and sgf.get_handicap() != 0:
             for setup in sgf.get_root().get_setup_stones():
                 for move in setup:
                     row, col = move
@@ -184,7 +186,7 @@ class GoDataProcessor():
         pool = multiprocessing.Pool(processes=cores)
         p = pool.map_async(worker, zips_to_process)
         try:
-            results = p.get()
+            _ = p.get()
         except KeyboardInterrupt:  # Caught keyboard interrupt, terminating workers
             pool.terminate()
             pool.join()

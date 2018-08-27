@@ -1,8 +1,8 @@
 import unittest
 
-from .helpers import is_point_an_eye
-from ..goboard import Board
-from ..gotypes import Player, Point
+from dlgo.agent.helpers import is_point_an_eye
+from dlgo.goboard import Board
+from dlgo.gotypes import Player, Point
 
 
 class EyeTest(unittest.TestCase):

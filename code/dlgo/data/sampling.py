@@ -5,12 +5,12 @@ from __future__ import print_function
 from __future__ import absolute_import
 import os
 import random
-from .index_processor import KGSIndex
+from dlgo.data.index_processor import KGSIndex
 from six.moves import range
 
 
-class Sampler(object):
-    '''Sample training and test data from zipped sgf files such that test data is kept stable.'''
+class Sampler:
+    """Sample training and test data from zipped sgf files such that test data is kept stable."""
     def __init__(self, data_dir='data', num_test_games=100, cap_year=2015, seed=1337):
         self.data_dir = data_dir
         self.num_test_games = num_test_games
@@ -33,7 +33,7 @@ class Sampler(object):
             raise ValueError(data_type + " is not a valid data type, choose from 'train' or 'test'")
 
     def draw_samples(self, num_sample_games):
-        '''Draw num_sample_games many training games from index.'''
+        """Draw num_sample_games many training games from index."""
         available_games = []
         index = KGSIndex(data_directory=self.data_dir)
 
@@ -56,10 +56,9 @@ class Sampler(object):
         return list(sample_set)
 
     def draw_training_games(self):
-        '''
-        Get list of all non-test games, that are no later than dec 2014
+        """Get list of all non-test games, that are no later than dec 2014
         Ignore games after cap_year to keep training data stable
-        '''
+        """
         index = KGSIndex(data_directory=self.data_dir)
         for file_info in index.file_info:
             filename = file_info['filename']
@@ -74,7 +73,7 @@ class Sampler(object):
         print('total num training games: ' + str(len(self.train_games)))
 
     def compute_test_samples(self):
-        '''If not already existing, create local file to store fixed set of test samples'''
+        """If not already existing, create local file to store fixed set of test samples"""
         if not os.path.isfile(self.test_folder):
             test_games = self.draw_samples(self.num_test_games)
             test_sample_file = open(self.test_folder, 'w')
@@ -91,7 +90,7 @@ class Sampler(object):
                 self.test_games.append((filename, index))
 
     def draw_training_samples(self, num_sample_games):
-        '''Draw training games, not overlapping with any of the test games.'''
+        """Draw training games, not overlapping with any of the test games."""
         available_games = []
         index = KGSIndex(data_directory=self.data_dir)
         for fileinfo in index.file_info:
@@ -113,7 +112,7 @@ class Sampler(object):
         return list(sample_set)
 
     def draw_all_training(self):
-        '''Draw all available training games.'''
+        """Draw all available training games."""
         available_games = []
         index = KGSIndex(data_directory=self.data_dir)
 

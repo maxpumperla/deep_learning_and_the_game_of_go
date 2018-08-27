@@ -1,1 +1,1 @@
-from .server import *
+from dlgo.httpfrontend.server import *

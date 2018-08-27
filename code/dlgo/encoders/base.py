@@ -9,7 +9,7 @@ __all__ = [
 
 
 # tag::base_encoder[]
-class Encoder():
+class Encoder:
     def name(self):  # <1>
         raise NotImplementedError()
 
@@ -28,7 +28,7 @@ class Encoder():
     def shape(self):  # <6>
         raise NotImplementedError()
 
-# <1> Loading an encoder by name.
+# <1> Lets us support logging or saving the name of the encoder our model is using.
 # <2> Turn a Go board into a numeric data.
 # <3> Turn a Go board point into an integer index.
 # <4> Turn an integer index back into a Go board point.
