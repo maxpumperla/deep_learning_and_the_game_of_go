@@ -11,6 +11,7 @@ __all__ = ['FastRandomBot']
 
 class FastRandomBot(Agent):
     def __init__(self):
+        Agent.__init__(self)
         self.dim = None
         self.point_cache = []
 
