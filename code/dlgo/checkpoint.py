@@ -14,7 +14,7 @@ __all__ = [
 ]
 
 
-class TrainingRun(object):
+class TrainingRun:
 
     def __init__(self, filename, model, epochs_completed, chunks_completed, num_chunks):
         self.filename = filename
