@@ -1,2 +1,2 @@
-from .tttboard import *
-from .ttttypes import *
+from dlgo.ttt.tttboard import *
+from dlgo.ttt.ttttypes import *

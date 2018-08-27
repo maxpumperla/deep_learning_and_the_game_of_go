@@ -1,7 +1,7 @@
-import enum
 import random
 
-from ..agent import Agent
+from dlgo.agent import Agent
+from dlgo.scoring import GameResult
 
 __all__ = [
     'DepthPrunedAgent',
@@ -21,33 +21,23 @@ def reverse_game_result(game_result):
 
 # tag::depth-prune[]
 def best_result(game_state, max_depth, eval_fn):
-    """Find the best result that next_player can get from this game
-    state.
-    """
-    if game_state.is_over():
-        # Game is already over.
-        if game_state.winner() == game_state.next_player:
-            return MAX_SCORE
-        else:
-            return MIN_SCORE
+    if game_state.is_over():                               # <1>
+        if game_state.winner() == game_state.next_player:  # <1>
+            return MAX_SCORE                               # <1>
+        else:                                              # <1>
+            return MIN_SCORE                               # <1>
 
-    if max_depth == 0:
-        # We have reached our maximum search depth. Use our heuristic to
-        # decide how good this sequence is.
-        return eval_fn(game_state)
+    if max_depth == 0:                                     # <2>
+        return eval_fn(game_state)                         # <2>
 
     best_so_far = MIN_SCORE
-    # Loop over all valid moves.
-    for candidate_move in game_state.legal_moves():
-        # See what the board would look like if we play this move.
-        next_state = game_state.apply_move(candidate_move)
-        # Find out our opponent's best result from that position.
-        opponent_best_result = best_result(next_state, max_depth - 1, eval_fn)
-        # Whatever our opponent wants, we want the opposite.
-        our_result = -1 * opponent_best_result
-        # See if this result is better than the best we've seen so far.
-        if our_result > best_so_far:
-            best_so_far = our_result
+    for candidate_move in game_state.legal_moves():        # <3>
+        next_state = game_state.apply_move(candidate_move) # <4>
+        opponent_best_result = best_result(                # <5>
+            next_state, max_depth - 1, eval_fn)            # <5>
+        our_result = -1 * opponent_best_result             # <6>
+        if our_result > best_so_far:                       # <7>
+            best_so_far = our_result                       # <7>
 
     return best_so_far
 # end::depth-prune[]
@@ -56,6 +46,7 @@ def best_result(game_state, max_depth, eval_fn):
 # tag::depth-prune-agent[]
 class DepthPrunedAgent(Agent):
     def __init__(self, max_depth, eval_fn):
+        Agent.__init__(self)
         self.max_depth = max_depth
         self.eval_fn = eval_fn
 

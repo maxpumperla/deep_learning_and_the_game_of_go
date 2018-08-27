@@ -2,8 +2,8 @@ import unittest
 
 import six
 
-from .goboard import Board, GameState, Move
-from .gotypes import Player, Point
+from dlgo.goboard import Board, GameState, Move
+from dlgo.gotypes import Player, Point
 
 
 class BoardTest(unittest.TestCase):
