@@ -4,6 +4,7 @@ language: python
 python:
   - "2.7"
   - "3.4"
+before_script: cd code
 before_install:
   - sudo apt-get install -y python-dev python-pip python-virtualenv gfortran libhdf5-dev pkg-config
 install:
@@ -20,5 +21,5 @@ install:
   - conda info -a
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pandas pytest h5py flask nose six tensorflow theano
   - source activate test-environment
-  - python code/setup.py install
-script: nosetests ./code --with-coverage
+  - python setup.py install
+script: nosetests . --with-coverage
