@@ -26,11 +26,13 @@ def main():
         bots['predict'] = agent.load_prediction_agent(
             h5py.File(args.predict_agent))
     if args.q_agent:
-        bots['q'] = rl.load_q_agent(h5py.File(args.q_agent))
-        bots['q'].set_temperature(0.01)
+        q_bot = rl.load_q_agent(h5py.File(args.q_agent))
+        q_bot.set_temperature(0.01)
+        bots['q'] = q_bot
     if args.ac_agent:
-        bots['ac'] = rl.load_ac_agent(h5py.File(args.ac_agent))
-        bots['ac'].set_temperature(0.05)
+        ac_bot = rl.load_ac_agent(h5py.File(args.ac_agent))
+        ac_bot.set_temperature(0.05)
+        bots['ac'] = ac_bot
 
     web_app = httpfrontend.get_web_app(bots)
     web_app.run(host=args.bind_address, port=args.port)

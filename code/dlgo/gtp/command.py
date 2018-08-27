@@ -12,7 +12,7 @@ __all__ = [
 
 
 # tag::gtp_command[]
-class Command(object):
+class Command:
 
     def __init__(self, sequence, name, args):
         self.sequence = sequence
@@ -42,11 +42,11 @@ Command(999, 'play', ('white', 'D4'))
 
 # tag::parse_command[]
 def parse(command_string):
-    pieces = command_string.split()  # Check for the sequence number.
+    pieces = command_string.split()
     try:
-        sequence = int(pieces[0])
+        sequence = int(pieces[0]) # <1>
         pieces = pieces[1:]
-    except ValueError:  # The first piece was non-numeric, so there was no sequence number.
+    except ValueError:  # <2>
         sequence = None
     name, args = pieces[0], pieces[1:]
     return Command(sequence, name, args)

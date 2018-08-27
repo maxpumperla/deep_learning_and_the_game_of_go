@@ -175,7 +175,7 @@ def generate_experience(learning_agent, reference_agent, exp_file,
 
 
 def train_worker(learning_agent, output_file, experience_file,
-                lr, batch_size):
+                 lr, batch_size):
     learning_agent = load_agent(learning_agent)
     with h5py.File(experience_file, 'r') as expf:
         exp_buffer = rl.load_experience(expf)
@@ -183,6 +183,7 @@ def train_worker(learning_agent, output_file, experience_file,
 
     with h5py.File(output_file, 'w') as updated_agent_outf:
         learning_agent.serialize(updated_agent_outf)
+
 
 def train_on_experience(learning_agent, output_file, experience_file,
                         lr, batch_size):
@@ -204,7 +205,7 @@ def train_on_experience(learning_agent, output_file, experience_file,
 
 
 def play_games(args):
-    agent1_fname, agent2_fname, num_games, board_size, gpu_frac, temperature  = args
+    agent1_fname, agent2_fname, num_games, board_size, gpu_frac, temperature = args
 
     kerasutil.set_gpu_memory_target(gpu_frac)
 
@@ -233,7 +234,7 @@ def play_games(args):
             losses += 1
         print('Agent 1 record: %d/%d' % (wins, wins + losses))
         color1 = color1.other
-    return (wins, losses)
+    return wins, losses
 
 
 def evaluate(learning_agent, reference_agent,

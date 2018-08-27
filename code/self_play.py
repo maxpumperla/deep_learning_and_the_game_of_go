@@ -55,8 +55,6 @@ def simulate_game(black_player, white_player):
     while not game.is_over():
         next_move = agents[game.next_player].select_move(game)
         moves.append(next_move)
-        # if next_move.is_pass:
-        #     print('%s passes' % name(game.next_player))
         game = game.apply_move(next_move)
 
     print_board(game.board)

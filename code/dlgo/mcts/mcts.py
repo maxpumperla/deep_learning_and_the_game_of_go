@@ -35,8 +35,8 @@ def show_tree(node, indent='', max_depth=3):
         print('%s%s %s %d %.3f' % (
             indent, fmt(player), fmt(move),
             node.num_rollouts,
-            node.winning_pct(player),
-            ))
+            node.winning_frac(player),
+        ))
     for child in sorted(node.children, key=lambda n: n.num_rollouts, reverse=True):
         show_tree(child, indent + '  ', max_depth - 1)
 
@@ -79,13 +79,14 @@ class MCTSNode(object):
     def is_terminal(self):
         return self.game_state.is_over()
 
-    def winning_pct(self, player):
+    def winning_frac(self, player):
         return float(self.win_counts[player]) / float(self.num_rollouts)
 # end::mcts-readers[]
 
 
 class MCTSAgent(agent.Agent):
     def __init__(self, num_rounds, temperature):
+        agent.Agent.__init__(self)
         self.num_rounds = num_rounds
         self.temperature = temperature
 
@@ -114,7 +115,7 @@ class MCTSAgent(agent.Agent):
 # end::mcts-rounds[]
 
         scored_moves = [
-            (child.winning_pct(game_state.next_player), child.move, child.num_rollouts)
+            (child.winning_frac(game_state.next_player), child.move, child.num_rollouts)
             for child in root.children
         ]
         scored_moves.sort(key=lambda x: x[0], reverse=True)
@@ -127,7 +128,7 @@ class MCTSAgent(agent.Agent):
         best_move = None
         best_pct = -1.0
         for child in root.children:
-            child_pct = child.winning_pct(game_state.next_player)
+            child_pct = child.winning_frac(game_state.next_player)
             if child_pct > best_pct:
                 best_pct = child_pct
                 best_move = child.move
@@ -148,7 +149,7 @@ class MCTSAgent(agent.Agent):
         # Loop over each child.
         for child in node.children:
             # Calculate the UCT score.
-            win_percentage = child.winning_pct(node.game_state.next_player)
+            win_percentage = child.winning_frac(node.game_state.next_player)
             exploration_factor = math.sqrt(log_rollouts / child.num_rollouts)
             uct_score = win_percentage + self.temperature * exploration_factor
             # Check if this is the largest we've seen so far.
@@ -158,7 +159,8 @@ class MCTSAgent(agent.Agent):
         return best_child
 # end::mcts-uct[]
 
-    def simulate_random_game(self, game):
+    @staticmethod
+    def simulate_random_game(game):
         bots = {
             Player.black: agent.FastRandomBot(),
             Player.white: agent.FastRandomBot(),

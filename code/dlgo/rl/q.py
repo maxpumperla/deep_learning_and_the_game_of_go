@@ -16,6 +16,7 @@ __all__ = [
 
 class QAgent(Agent):
     def __init__(self, model, encoder, policy='eps-greedy'):
+        Agent.__init__(self)
         self.model = model
         self.encoder = encoder
         self.collector = None
@@ -62,6 +63,8 @@ class QAgent(Agent):
             ranked_moves = self.rank_moves_eps_greedy(values)
         elif self.policy == 'weighted':
             ranked_moves = self.rank_moves_weighted(values)
+        else:
+            ranked_moves = None
 
         for move_idx in ranked_moves:
             point = self.encoder.decode_point_index(moves[move_idx])

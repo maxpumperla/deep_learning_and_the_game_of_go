@@ -7,7 +7,7 @@ __all__ = [
 
 
 # tag::gtp_response[]
-class Response(object):
+class Response:
     def __init__(self, status, body):
         self.success = status
         self.body = body
@@ -21,8 +21,8 @@ def error(body=''):  # <2>
     return Response(status=False, body=body)
 
 
-def bool_response(bool):  # <3>
-    return success('true') if bool is True else success('false')
+def bool_response(boolean):  # <3>
+    return success('true') if boolean is True else success('false')
 
 
 def serialize(gtp_command, gtp_response):  # <4>

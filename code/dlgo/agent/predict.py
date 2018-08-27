@@ -16,16 +16,20 @@ __all__ = [
 # tag::dl_agent_init[]
 class DeepLearningAgent(Agent):
     def __init__(self, model, encoder):
-        self._model = model
-        self._encoder = encoder
+        Agent.__init__(self)
+        self.model = model
+        self.encoder = encoder
 # end::dl_agent_init[]
 
 # tag::dl_agent_predict[]
+    def predict(self, game_state):
+        encoded_state = self.encoder.encode(game_state)
+        input_tensor = np.array([encoded_state])
+        return self.model.predict(input_tensor)[0]
+
     def select_move(self, game_state):
-        num_moves = self._encoder.board_width * self._encoder.board_height
-        board_tensor = self._encoder.encode(game_state)
-        X = np.array([board_tensor])
-        move_probs = self._model.predict(X)[0]
+        num_moves = self.encoder.board_width * self.encoder.board_height
+        move_probs = self.predict(game_state)
 # end::dl_agent_predict[]
 
 # tag::dl_agent_probabilities[]
@@ -43,11 +47,11 @@ class DeepLearningAgent(Agent):
         ranked_moves = np.random.choice(
             candidates, num_moves, replace=False, p=move_probs)  # <2>
         for point_idx in ranked_moves:
-            point = self._encoder.decode_point_index(point_idx)
+            point = self.encoder.decode_point_index(point_idx)
             if game_state.is_valid_move(goboard.Move.play(point)) and \
                     not is_point_an_eye(game_state.board, point, game_state.next_player):  # <3>
                 return goboard.Move.play(point)
-        return goboard.Move.pass_turn()  # <4> No legal, non-self-destructive moves less.
+        return goboard.Move.pass_turn()  # <4>
 # <1> Turn the probabilities into a ranked list of moves.
 # <2> Sample potential candidates
 # <3> Starting from the top, find a valid move that doesn't reduce eye-space.
@@ -57,11 +61,11 @@ class DeepLearningAgent(Agent):
 # tag::dl_agent_serialize[]
     def serialize(self, h5file):
         h5file.create_group('encoder')
-        h5file['encoder'].attrs['name'] = self._encoder.name()
-        h5file['encoder'].attrs['board_width'] = self._encoder.board_width
-        h5file['encoder'].attrs['board_height'] = self._encoder.board_height
+        h5file['encoder'].attrs['name'] = self.encoder.name()
+        h5file['encoder'].attrs['board_width'] = self.encoder.board_width
+        h5file['encoder'].attrs['board_height'] = self.encoder.board_height
         h5file.create_group('model')
-        kerasutil.save_model_to_hdf5_group(self._model, h5file['model'])
+        kerasutil.save_model_to_hdf5_group(self.model, h5file['model'])
 # end::dl_agent_serialize[]
 
 

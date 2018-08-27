@@ -6,7 +6,8 @@ import h5py
 
 model_file = h5py.File("agents/betago.hdf5", "r")
 agent = load_prediction_agent(model_file)
-termination = termination.get("opponent_passes")
+strategy = termination.get("opponent_passes")
+termination_agent = termination.TerminationAgent(agent, strategy)
 
-frontend = GTPFrontend(agent, termination)
+frontend = GTPFrontend(termination_agent)
 frontend.run()

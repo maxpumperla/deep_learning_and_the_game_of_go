@@ -1,7 +1,7 @@
-'''
+"""
 Script used to create surface plots to illustrate
 (stochastic) gradient descent in chapter 5.
-'''
+"""
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter

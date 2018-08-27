@@ -22,20 +22,20 @@ def worker(url_and_target):  # Parallelize data download via multiprocessing
         print('>>> Exiting child process')
 
 
-class KGSIndex(object):
+class KGSIndex:
 
     def __init__(self,
                  kgs_url='http://u-go.net/gamerecords/',
                  index_page='kgs_index.html',
                  data_directory='data'):
-        '''Create an index of zip files containing SGF data of actual Go Games on KGS.
+        """Create an index of zip files containing SGF data of actual Go Games on KGS.
 
         Parameters:
         -----------
         kgs_url: URL with links to zip files of games
         index_page: Name of local html file of kgs_url
         data_directory: name of directory relative to current path to store SGF data
-        '''
+        """
         self.kgs_url = kgs_url
         self.index_page = index_page
         self.data_directory = data_directory
@@ -44,7 +44,7 @@ class KGSIndex(object):
         self.load_index()  # Load index on creation
 
     def download_files(self):
-        '''Download zip files by distributing work on all available CPUs'''
+        """Download zip files by distributing work on all available CPUs"""
         if not os.path.isdir(self.data_directory):
             os.makedirs(self.data_directory)
 
@@ -58,7 +58,7 @@ class KGSIndex(object):
         pool = multiprocessing.Pool(processes=cores)
         try:
             it = pool.imap(worker, urls_to_download)
-            for i in it:
+            for _ in it:
                 pass
             pool.close()
             pool.join()
@@ -69,7 +69,7 @@ class KGSIndex(object):
             sys.exit(-1)
 
     def create_index_page(self):
-        '''If there is no local html containing links to files, create one.'''
+        """If there is no local html containing links to files, create one."""
         if os.path.isfile(self.index_page):
             print('>>> Reading cached index page')
             index_file = open(self.index_page, 'r')
@@ -87,7 +87,7 @@ class KGSIndex(object):
         return index_contents
 
     def load_index(self):
-        '''Create the actual index representation from the previously downloaded or cached html.'''
+        """Create the actual index representation from the previously downloaded or cached html."""
         index_contents = self.create_index_page()
         split_page = [item for item in index_contents.split('<a href="') if item.startswith("https://")]
         for item in split_page:

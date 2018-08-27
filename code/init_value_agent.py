@@ -2,7 +2,7 @@ import argparse
 
 import h5py
 
-from keras.layers import Dense, Input, concatenate
+from keras.layers import Dense, Input
 from keras.models import Model
 import dlgo.networks
 from dlgo import rl
@@ -18,7 +18,7 @@ def main():
 
     encoder = encoders.get_encoder_by_name('simple', args.board_size)
     board_input = Input(shape=encoder.shape(), name='board_input')
-    action_input = Input(shape=(encoder.num_points(),), name='action_input')
+    # action_input = Input(shape=(encoder.num_points(),), name='action_input')
 
     processed_board = board_input
     network = getattr(dlgo.networks, args.network)

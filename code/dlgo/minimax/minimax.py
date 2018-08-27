@@ -26,15 +26,6 @@ def reverse_game_result(game_result):
 
 # tag::minimax-signature[]
 def best_result(game_state):
-    """Find the best result that next_player can get from this game
-    state.
-
-    Returns:
-        GameResult.win if next_player can guarantee a win
-        GameResult.draw if next_player can guarantee a draw
-        GameResult.loss if, no matter what next_player chooses, the
-            opponent can still force a win
-    """
 # end::minimax-signature[]
 # tag::minimax-base-case[]
     if game_state.is_over():
@@ -52,19 +43,18 @@ def best_result(game_state):
 
 # tag::minimax-recursive-case[]
     best_result_so_far = GameResult.loss
-    opponent = game_state.next_player.other
     for candidate_move in game_state.legal_moves():
-        # See what the board would look like if we play this move.
-        next_state = game_state.apply_move(candidate_move)
-        # Find out our opponent's best move.
-        opponent_best_result = best_result(next_state)
-        # Whatever our opponent wants, we want the opposite.
-        our_result = reverse_game_result(opponent_best_result)
-        # See if this result is better than the best we've seen so far.
-        if our_result.value > best_result_so_far.value:
+        next_state = game_state.apply_move(candidate_move)     # <1>
+        opponent_best_result = best_result(next_state)         # <2>
+        our_result = reverse_game_result(opponent_best_result) # <3>
+        if our_result.value > best_result_so_far.value:        # <4>
             best_result_so_far = our_result
     return best_result_so_far
 # end::minimax-recursive-case[]
+        # See what the board would look like if we play this move.
+        # Find out our opponent's best move.
+        # Whatever our opponent wants, we want the opposite.
+        # See if this result is better than the best we've seen so far.
 
 
 # tag::minimax-agent[]

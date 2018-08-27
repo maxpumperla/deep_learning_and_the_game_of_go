@@ -32,10 +32,16 @@ def normalize(x):
 class PolicyAgent(Agent):
     """An agent that uses a deep policy network to select moves."""
     def __init__(self, model, encoder):
+        Agent.__init__(self)
         self._model = model
         self._encoder = encoder
         self._collector = None
         self._temperature = 0.0
+
+    def predict(self, game_state):
+        encoded_state = self._encoder.encode(game_state)
+        input_tensor = np.array([encoded_state])
+        return self._model.predict(input_tensor)[0]
 
     def set_temperature(self, temperature):
         self._temperature = temperature
@@ -47,14 +53,14 @@ class PolicyAgent(Agent):
         num_moves = self._encoder.board_width * self._encoder.board_height
 
         board_tensor = self._encoder.encode(game_state)
-        X = np.array([board_tensor])
+        x = np.array([board_tensor])
 
         if np.random.random() < self._temperature:
             # Explore random moves.
             move_probs = np.ones(num_moves) / num_moves
         else:
             # Follow our current policy.
-            move_probs = self._model.predict(X)[0]
+            move_probs = self._model.predict(x)[0]
 
         # Prevent move probs from getting stuck at 0 or 1.
         eps = 1e-5

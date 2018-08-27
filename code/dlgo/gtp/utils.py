@@ -1,4 +1,4 @@
-class SGFWriter():
+class SGFWriter:
 
     def __init__(self, output_sgf):
         self.output_sgf = output_sgf

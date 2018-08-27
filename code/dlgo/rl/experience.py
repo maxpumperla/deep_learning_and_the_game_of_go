@@ -8,7 +8,7 @@ __all__ = [
 ]
 
 
-class ExperienceCollector(object):
+class ExperienceCollector:
     def __init__(self):
         self.states = []
         self.actions = []
@@ -43,7 +43,7 @@ class ExperienceCollector(object):
         self._current_episode_estimated_values = []
 
 
-class ExperienceBuffer(object):
+class ExperienceBuffer:
     def __init__(self, states, actions, rewards, advantages):
         self.states = states
         self.actions = actions

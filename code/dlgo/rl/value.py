@@ -16,6 +16,7 @@ __all__ = [
 
 class ValueAgent(Agent):
     def __init__(self, model, encoder, policy='eps-greedy'):
+        Agent.__init__(self)
         self.model = model
         self.encoder = encoder
         self.collector = None
@@ -23,6 +24,11 @@ class ValueAgent(Agent):
         self.policy = policy
 
         self.last_move_value = 0
+
+    def predict(self, game_state):
+        encoded_state = self.encoder.encode(game_state)
+        input_tensor = np.array([encoded_state])
+        return self.model.predict(input_tensor)[0]
 
     def set_temperature(self, temperature):
         self.temperature = temperature
@@ -64,6 +70,8 @@ class ValueAgent(Agent):
             ranked_moves = self.rank_moves_eps_greedy(values)
         elif self.policy == 'weighted':
             ranked_moves = self.rank_moves_weighted(values)
+        else:
+            ranked_moves = None
 
         for move_idx in ranked_moves:
             move = moves[move_idx]

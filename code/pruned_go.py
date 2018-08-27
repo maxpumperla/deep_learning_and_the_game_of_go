@@ -10,15 +10,6 @@ BOARD_SIZE = 5
 
 # tag::naive-board-heuristic[]
 def capture_diff(game_state):
-    """Calculate the difference between the number of black stones and
-    white stones on the board. This will be the same as the difference
-    in the number of captures, unless one player passes early.
-
-    Returns the difference from the perspective of the next player to
-    play.
-    If it's black's move, we return (black stones) - (white stones).
-    If it's white's move, we return (white stones) - (black stones).
-    """
     black_stones = 0
     white_stones = 0
     for r in range(1, game_state.board.num_rows + 1):
@@ -29,10 +20,10 @@ def capture_diff(game_state):
                 black_stones += 1
             elif color == gotypes.Player.white:
                 white_stones += 1
-    diff = black_stones - white_stones
-    if game_state.next_player == gotypes.Player.black:
-        return diff
-    return -1 * diff
+    diff = black_stones - white_stones                    # <1>
+    if game_state.next_player == gotypes.Player.black:    # <2>
+        return diff                                       # <2>
+    return -1 * diff                                      # <3>
 # end::naive-board-heuristic[]
 
 

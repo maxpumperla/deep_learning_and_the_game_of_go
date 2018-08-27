@@ -95,7 +95,7 @@ def play_games(args):
             losses += 1
         print('Agent 1 record: %d/%d' % (wins, wins + losses))
         color1 = color1.other
-    return (wins, losses)
+    return wins, losses
 
 
 def main():

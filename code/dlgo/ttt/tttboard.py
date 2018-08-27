@@ -22,7 +22,7 @@ DIAG_1 = (Point(1, 1), Point(2, 2), Point(3, 3))
 DIAG_2 = (Point(1, 3), Point(2, 2), Point(3, 1))
 
 
-class Board(object):
+class Board:
     def __init__(self):
         self._grid = {}
 
@@ -31,7 +31,8 @@ class Board(object):
         assert self._grid.get(point) is None
         self._grid[point] = player
 
-    def is_on_grid(self, point):
+    @staticmethod
+    def is_on_grid(point):
         return 1 <= point.row <= BOARD_SIZE and \
             1 <= point.col <= BOARD_SIZE
 
@@ -44,12 +45,12 @@ class Board(object):
         return self._grid.get(point)
 
 
-class Move(object):
+class Move:
     def __init__(self, point):
         self.point = point
 
 
-class GameState(object):
+class GameState:
     def __init__(self, board, next_player, move):
         self.board = board
         self.next_player = next_player

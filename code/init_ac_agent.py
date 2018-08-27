@@ -2,7 +2,7 @@ import argparse
 
 import h5py
 
-from keras.layers import Dense, Input, concatenate
+from keras.layers import Dense, Input
 from keras.models import Model
 import dlgo.networks
 from dlgo import rl

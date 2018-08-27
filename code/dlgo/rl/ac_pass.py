@@ -15,6 +15,7 @@ __all__ = [
 
 class ACAgent(Agent):
     def __init__(self, model, encoder):
+        Agent.__init__(self)
         self.model = model
         self.encoder = encoder
         self.collector = None
@@ -32,9 +33,9 @@ class ACAgent(Agent):
         num_moves = self.encoder.board_width * self.encoder.board_height
 
         board_tensor = self.encoder.encode(game_state)
-        X = np.array([board_tensor])
+        x = np.array([board_tensor])
 
-        actions, values = self.model.predict(X)
+        actions, values = self.model.predict(x)
         move_probs = actions[0]
         estimated_value = values[0][0]
         self.last_state_value = float(estimated_value)

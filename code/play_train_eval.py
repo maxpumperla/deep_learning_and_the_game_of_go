@@ -172,7 +172,7 @@ def generate_experience(learning_agent, reference_agent, exp_file,
 
 
 def train_worker(learning_agent, output_file, experience_file,
-                lr, batch_size):
+                 lr, batch_size):
     with h5py.File(learning_agent, 'r') as learning_agentf:
         learning_agent = agent.load_policy_agent(learning_agentf)
     with h5py.File(experience_file, 'r') as expf:
@@ -182,6 +182,7 @@ def train_worker(learning_agent, output_file, experience_file,
     with h5py.File(output_file, 'w') as updated_agent_outf:
         learning_agent.serialize(updated_agent_outf)
 
+
 def train_on_experience(learning_agent, output_file, experience_file,
                         lr, batch_size):
     # Do the training in the background process. Otherwise some Keras
@@ -189,13 +190,13 @@ def train_on_experience(learning_agent, output_file, experience_file,
     # that messes with the workers.
     worker = multiprocessing.Process(
         target=train_worker,
-        args=(
+        args=[
             learning_agent,
             output_file,
             experience_file,
             lr,
             batch_size
-        )
+        ]
     )
     worker.start()
     worker.join()
@@ -231,7 +232,7 @@ def play_games(args):
             losses += 1
         print('Agent 1 record: %d/%d' % (wins, wins + losses))
         color1 = color1.other
-    return (wins, losses)
+    return wins, losses
 
 
 def evaluate(learning_agent, reference_agent,

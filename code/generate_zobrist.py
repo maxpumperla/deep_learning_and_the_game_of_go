@@ -4,10 +4,10 @@ import random
 from dlgo.gotypes import Player, Point
 
 
-def to_python(state):
-    if state is None:
+def to_python(player_state):
+    if player_state is None:
         return 'None'
-    if state == Player.black:
+    if player_state == Player.black:
         return Player.black
     return Player.white
 
