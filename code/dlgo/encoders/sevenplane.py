@@ -1,8 +1,8 @@
 # tag::sevenplane_init[]
 import numpy as np
 
-from .base import Encoder
-from ..goboard import Move, Point
+from dlgo.encoders.base import Encoder
+from dlgo.goboard import Move, Point
 
 
 class SevenPlaneEncoder(Encoder):
@@ -49,7 +49,7 @@ class SevenPlaneEncoder(Encoder):
         return self.board_width * self.board_height
 
     def shape(self):
-        return (self.num_planes, self.board_height, self.board_width)
+        return self.num_planes, self.board_height, self.board_width
 
 
 def create(board_size):

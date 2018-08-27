@@ -24,7 +24,7 @@ from dlgo.data.sampling import Sampler  # <1>
 
 
 # tag::processor_init[]
-class GoDataProcessor():
+class GoDataProcessor:
     def __init__(self, encoder='oneplane', data_directory='data'):
         self.encoder = get_encoder_by_name(encoder, 19)
         self.data_dir = data_directory
@@ -57,7 +57,7 @@ class GoDataProcessor():
 
 # <1> As `data_type` you can choose either 'train' or 'test'.
 # <2> `num_samples` refers to the number of games to load data from.
-# <3> We download all games from KGS to our local data directory.
+# <3> We download all games from KGS to our local data directory. If data is available, it won't be downloaded again.
 # <4> The `Sampler` instance selects the specified number of games for a data type.
 # <5> We collect all zip file names contained in the data in a list.
 # <6> Then we group all SGF file indices by zip file name.
@@ -89,7 +89,7 @@ class GoDataProcessor():
         total_examples = self.num_total_examples(zip_file, game_list, name_list)  # <1>
 
         shape = self.encoder.shape()  # <2>
-        feature_shape = np.insert(shape, 0, total_examples)
+        feature_shape = np.insert(shape, 0, np.asarray([total_examples]))
         features = np.zeros(feature_shape)
         labels = np.zeros((total_examples,))
 
@@ -105,6 +105,7 @@ class GoDataProcessor():
 
             for item in sgf.main_sequence_iter():  # <5>
                 color, move_tuple = item.get_move()
+                point = None
                 if color is not None:
                     if move_tuple is not None:  # <6>
                         row, col = move_tuple
@@ -112,7 +113,7 @@ class GoDataProcessor():
                         move = Move.play(point)
                     else:
                         move = Move.pass_turn()  # <7>
-                    if first_move_done:
+                    if first_move_done and point is not None:
                         features[counter] = self.encoder.encode(game_state)  # <8>
                         labels[counter] = self.encoder.encode_point(point)  # <9>
                         counter += 1
@@ -164,11 +165,11 @@ class GoDataProcessor():
             base = self.data_dir + '/' + file_prefix + '_features_*.npy'
             for feature_file in glob.glob(base):
                 label_file = feature_file.replace('features', 'labels')
-                X = np.load(feature_file)
+                x = np.load(feature_file)
                 y = np.load(label_file)
-                X = X.astype('float32')
+                x = x.astype('float32')
                 y = to_categorical(y.astype(int), 19 * 19)
-                feature_list.append(X)
+                feature_list.append(x)
                 label_list.append(y)
         features = np.concatenate(feature_list, axis=0)
         labels = np.concatenate(label_list, axis=0)
@@ -179,11 +180,13 @@ class GoDataProcessor():
 # end::consolidate_games[]
 
 # tag::get_handicap[]
-    def get_handicap(self, sgf):
+    @staticmethod
+    def get_handicap(sgf):
         go_board = Board(19, 19)
         first_move_done = False
+        move = None
         game_state = GameState.new_game(19)
-        if sgf.get_handicap() != None and sgf.get_handicap() != 0:
+        if sgf.get_handicap() is not None and sgf.get_handicap() != 0:
             for setup in sgf.get_root().get_setup_stones():
                 for move in setup:
                     row, col = move

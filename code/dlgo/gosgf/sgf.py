@@ -8,6 +8,8 @@ Adapted from gomill by Matthew Woodcraft, https://github.com/mattheww/gomill
 from __future__ import absolute_import
 import datetime
 
+import six
+
 from . import sgf_grammar
 from . import sgf_properties
 
@@ -18,7 +20,7 @@ __all__ = [
 ]
 
 
-class Node(object):
+class Node:
     """An SGF node.
 
     Instantiate with a raw property map (see sgf_grammar) and an
@@ -496,7 +498,7 @@ class _Unexpanded_root_tree_node(_Root_tree_node):
             yield Node(properties, presenter)
 
 
-class Sgf_game(object):
+class Sgf_game:
     """An SGF game tree.
 
     The complete game tree is represented using Tree_nodes. The various methods
@@ -591,6 +593,8 @@ class Sgf_game(object):
         See from_coarse_game_tree for details of size and encoding handling.
 
         """
+        if not isinstance(s, six.binary_type):
+            s = s.encode('ascii')
         coarse_game = sgf_grammar.parse_sgf_game(s)
         return cls.from_coarse_game_tree(coarse_game, override_encoding)
 

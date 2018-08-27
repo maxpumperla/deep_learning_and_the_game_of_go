@@ -1,9 +1,9 @@
 # tag::randombotimports[]
 import random
-from .base import Agent
-from .helpers import is_point_an_eye
-from ..goboard import Move
-from ..gotypes import Point
+from dlgo.agent.base import Agent
+from dlgo.agent.helpers import is_point_an_eye
+from dlgo.goboard_slow import Move
+from dlgo.gotypes import Point
 # end::randombotimports[]
 
 

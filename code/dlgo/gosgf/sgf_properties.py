@@ -15,7 +15,7 @@ from math import isinf, isnan
 
 import six
 
-from . import sgf_grammar
+from dlgo.gosgf import sgf_grammar
 from six.moves import range
 
 # In python 2, indexing a str gives one-character strings.
@@ -99,7 +99,7 @@ def serialise_go_point(move, size):
     return col_s + row_s
 
 
-class _Context(object):
+class _Context:
     def __init__(self, size, encoding):
         self.size = size
         self.encoding = encoding
@@ -502,7 +502,7 @@ def serialise_LB_list(values, context):
             for point, text in values]
 
 
-class Property_type(object):
+class Property_type:
     """Description of a property type."""
     def __init__(self, interpreter, serialiser, uses_list,
                  allows_empty_list=False):
@@ -518,6 +518,7 @@ def _make_property_type(type_name, allows_empty_list=False):
         globals()["serialise_" + type_name],
         uses_list=(type_name.endswith("_list")),
         allows_empty_list=allows_empty_list)
+
 
 _property_types_by_name = {
     'none': _make_property_type('none'),

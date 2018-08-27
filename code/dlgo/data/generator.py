@@ -1,18 +1,17 @@
 # tag::data_generator[]
-import gc  # <1>
 import glob
 import numpy as np
 from keras.utils import to_categorical
 
 
-class DataGenerator(object):
+class DataGenerator:
     def __init__(self, data_directory, samples):
         self.data_directory = data_directory
         self.samples = samples
-        self.files = set(file_name for file_name, index in samples)  # <2>
+        self.files = set(file_name for file_name, index in samples)  # <1>
         self.num_samples = None
 
-    def get_num_samples(self, batch_size=128, num_classes=19 * 19):  # <3>
+    def get_num_samples(self, batch_size=128, num_classes=19 * 19):  # <2>
         if self.num_samples is not None:
             return self.num_samples
         else:
@@ -20,9 +19,8 @@ class DataGenerator(object):
             for X, y in self._generate(batch_size=batch_size, num_classes=num_classes):
                 self.num_samples += X.shape[0]
             return self.num_samples
-# <1> We use a garbage collector (gc) to free up memory from unused structures.
-# <2> Our generator has access to a set of files that we sampled earlier.
-# <3> Depending on the application, we may need to know how many examples we have.
+# <1> Our generator has access to a set of files that we sampled earlier.
+# <2> Depending on the application, we may need to know how many examples we have.
 # end::data_generator[]
 
 # tag::private_generate[]
@@ -32,19 +30,16 @@ class DataGenerator(object):
             base = self.data_directory + '/' + file_name + '_features_*.npy'
             for feature_file in glob.glob(base):
                 label_file = feature_file.replace('features', 'labels')
-                X = np.load(feature_file)
+                x = np.load(feature_file)
                 y = np.load(label_file)
-                X = X.astype('float32')
+                x = x.astype('float32')
                 y = to_categorical(y.astype(int), num_classes)
-                gc.collect()
-                while X.shape[0] >= batch_size:
-                    X_batch, X = X[:batch_size], X[batch_size:]
+                while x.shape[0] >= batch_size:
+                    x_batch, x = x[:batch_size], x[batch_size:]
                     y_batch, y = y[:batch_size], y[batch_size:]
-                    gc.collect()
-                    yield X_batch, y_batch  # <1>
-            gc.collect()
+                    yield x_batch, y_batch  # <1>
 
-# <1> We yield batches of data as we go.
+# <1> We return or "yield" batches of data as we go.
 # end::private_generate[]
 
 # tag::generate[]
