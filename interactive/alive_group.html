@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Interactive Board Demo</title>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/iframeSizer.contentWindow.min.js"></script>
+  <link rel="stylesheet" href="css/font-awesome.css" type="text/css">
+  <link rel="stylesheet" href="css/base.css" type="text/css">
+
+</head>
+<body>
+
+<h1>An alive group</h1>
+
+<div style="text-align: center; width: 100%">
+<div style="display: inline-block;">
+  <div style="float: left;">
+    <div id="board">
+      <div class="container">
+        <p class="description" id=0>This white group in the middle is completely surrounded by black, but alive. The group has two eyes, at D4 and E5, so black can't play at either of them.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=0>
+        .........
+        .........
+        ....xx...
+        ..xxoox..
+        .xoo.ox..
+        .xo.oox..
+        .xooxx...
+        ..xx.....
+        .........
+      </div>
+
+      <div class="container">
+        <p class="description" id=1>However, every single stone in white's formation is essential to being alive. In this situation, we flipped C5 to black. Now black can capture three white stones with D4 next and the whole group is dead.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=1>
+        .........
+        .........
+        ....xx...
+        ..xxoox..
+        .xxo.ox..
+        .xo.oox..
+        .xooxx...
+        ..xx.....
+        .........
+      </div>
+
+      <div class="container">
+        <p class="description" id=2>No matter which stone white stone we take away, the whole white group will be dead. Here is another example of this.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=2>
+        .........
+        .........
+        ....xx...
+        ..xxoxx..
+        .xoo.ox..
+        .xo.oox..
+        .xooxx...
+        ..xx.....
+        .........
+      </div>
+
+
+    </div>
+
+    <p class="controls" style="width: 500px;">
+    <a href="#" onclick="move(-5); return false;"><i class="fa fa-backward"></i></a>
+    <a href="#" onclick="move(-1); return false;"><i class="fa fa-step-backward"></i></a>
+    <strong id="move">1</strong> / <strong id="moves">1</strong>
+    <a href="#" onclick="move(1); return false;"><i class="fa fa-step-forward"></i></a>
+    <a href="#" onclick="move(5); return false;"><i class="fa fa-forward"></i></a>
+    </p>
+  </div>
+
+</div>
+</div>
+
+<script type="text/javascript" src="dist/jgoboard-latest.js"></script>
+<script type="text/javascript" src="large/board.js"></script>
+<script type="text/javascript" src="medium/board.js"></script>
+<script type="text/javascript">
+
+  var moveNum = 0;
+  var totalMoves = numMoves();
+  $('#moves').html(totalMoves);
+
+  function numMoves() {
+    var max = 0;
+    $('.jgoboard').each(function() {
+      max = Math.max(this.id, max);
+    });
+    return max + 1;
+  }
+
+  function move(moveDiff) {
+    if (moveNum + moveDiff > totalMoves - 1) {
+      moveNum = totalMoves - 1;
+    } else if (moveNum + moveDiff < 0) {
+      moveNum = 0;
+    } else {
+      moveNum = moveNum + moveDiff;
+    }
+    var moves = document.getElementsByClassName('jgoboard');
+    var descriptions = document.getElementsByClassName('description');
+    for (var index = 0; index < moves.length; index++) {
+      moves[index].style.display = 'none';
+      descriptions[index].style.display = 'none';
+    }
+    moves[moveNum].style.display = 'inline';
+    descriptions[moveNum].style.display = 'inline';
+
+    $('#move').html(moveNum + 1);
+  }
+
+  $(document).ready(function() {
+    $("body").keydown(function(e) {
+      if(e.keyCode == 37) move(-1);
+      else if(e.keyCode == 39) move(1);
+    });
+    move(0);
+  });
+
+</script>
+
+<script type="text/javascript">JGO.auto.init(document, JGO);</script>
+</body>
+</html>

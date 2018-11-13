@@ -1,0 +1,200 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jGoBoard SGF Player Demo</title>
+  <link rel="stylesheet" href="css/base.css" type="text/css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+<body>
+<div id="main">
+
+<p id="menu" class="controls" style="width: 900px;">
+<input id="url" placeholder="enter SGF URL here" type="text"> <button onclick="loadURL($('#url').val());">Load URL</button>
+<input style="padding-left: 2em;" id="file" type="file"> <button onclick="loadFile();">Load file</button>
+</p>
+
+<div style="text-align: center; width: 100%">
+<div style="display: inline-block;">
+  <div style="float: left;">
+    <div id="board"></div>
+
+    <p class="controls" style="width: 500px;">
+    <a href="#" onclick="move(0); return false;"><i class="fa fa-fast-backward"></i></a>
+    <a href="#" onclick="move(-10); return false;"><i class="fa fa-backward"></i></a>
+    <a href="#" onclick="move(-1); return false;"><i class="fa fa-step-backward"></i></a>
+    <strong id="move">1</strong> / <strong id="moves">1</strong>
+    <a href="#" onclick="move(1); return false;"><i class="fa fa-step-forward"></i></a>
+    <a href="#" onclick="move(10); return false;"><i class="fa fa-forward"></i></a>
+    <a href="#" onclick="move(1000); return false;"><i class="fa fa-fast-forward"></i></a>
+    Variation: <strong id="variation">1</strong> / <strong id="variations">1</strong>
+    <a href="#" onclick="nextVariation(); return false;"><i title="variation" class="fa fa-arrows-v"></i></a>
+    </p>
+  </div>
+
+  <div id="infopane" style="float: left; padding: 1em; text-align: left;">
+    <h2>Game information</h2>
+    <p id="information"></p>
+    <p>
+    Black captures: <strong id="black_captures"></strong><br>
+    White captures: <strong id="white_captures"></strong>
+    </p>
+    <h2>Comments</h2>
+    <p id="comments"></p>
+  </div>
+
+  <div style="clear: both;"></div>
+</div>
+</div>
+
+<script type="text/javascript" src="dist/jgoboard-latest.js"></script>
+<script type="text/javascript" src="medium/board.js"></script>
+<script type="text/javascript" src="large/board.js"></script>
+<script type="text/javascript">
+var moveNum = 0, moves = 0, gotoMove = 0;
+var jrecord = false, jnotifier;
+
+function move(dir) { // dir=0 has special meaning "beginning"
+  if(!jrecord) return; // disable movement until SGF loaded
+
+  if(dir == 0) {
+    jrecord.first();
+    moveNum = 0;
+  }
+  while(dir < 0) {
+    if(!jrecord.previous()) break;
+    moveNum--; dir++;
+  }
+  while(dir > 0) {
+    if(!jrecord.next()) break;
+    moveNum++; dir--;
+  }
+  updateInfo();
+}
+
+function nextVariation() {
+  jrecord.setVariation((jrecord.getVariation() + 1) % jrecord.getVariations());
+}
+
+function updateInfo() {
+  var info = jrecord.getCurrentNode().info;
+  $('#move').html(moveNum);
+  $('#comments').html(info.comment ? info.comment.replace(/\n/g, '<br>') : '');
+  $('#black_captures').html(info.captures[JGO.BLACK]);
+  $('#white_captures').html(info.captures[JGO.WHITE]);
+  $('#variation').html(jrecord.getVariation()+1);
+  $('#variations').html(jrecord.getVariations());
+}
+
+function updateGameInfo(info) {
+  var html = "";
+
+  if("black" in info) {
+    html += "Black: <strong>" + info.black;
+    if("blackRank" in info) html += ", " + info.blackRank;
+    html += "</strong><br />";
+  }
+
+  if("white" in info) {
+    html += "White: <strong>" + info.white;
+    if("whiteRank" in info) html += ", " + info.whiteRank;
+    html += "</strong><br />";
+  }
+
+  var additional = [["result", "Result"]];
+
+  $.each(additional, function(i, tup) {
+      if(tup[0] in info)
+      html += tup[1] + ": <strong>" + info[tup[0]] + "</strong><br>";
+      });
+
+  $('#information').html(html);
+}
+
+function getParams() { // VERY simple query parameter parse
+  var params = {}, url = window.location.toString();
+  if(url.indexOf('?') !== -1) {
+    url.substr(url.indexOf('?')+1).split('&').forEach(function(pair) {
+        var pos = pair.indexOf('=');
+        if(pos === -1) return; // skip if no equals sign
+        params[pair.substr(0, pos)] = pair.substr(pos+1);
+    });
+  }
+  return params;
+}
+
+$(document).ready(function() {
+  $("body").keydown(function(e) { // left/right arrow navigation
+    if(e.keyCode == 37) move(-1);
+    else if(e.keyCode == 39) move(1);
+  });
+
+  var params = getParams(); // parse URL parameters
+  var jboard = new JGO.Board(19, 19), jsetup; // hardcoded size
+
+  if('board' in params && params.board in JGO.BOARD)
+    jsetup = new JGO.Setup(jboard, JGO.BOARD[params.board]);
+  else
+    jsetup = new JGO.Setup(jboard, JGO.BOARD.medium);
+
+  // we can use this to change the board to listen to
+  notifier = jsetup.getNotifier();
+
+  jsetup.create('board', function(canvas) {
+    canvas.addListener('click', function(c) {
+      if(c.i < 10) move(-1); // back
+      if(c.i > 10) move(1); // forward
+    });
+  });
+
+  if('hidemenu' in params) $('#menu').hide();
+  if('hideinfo' in params) $('#infopane').hide();
+  if('move' in params) gotoMove = parseInt(params.move);
+  if('url' in params) loadURL(params.url); // load straight away
+});
+
+function loadSGF(sgf) {
+  jrecord = JGO.sgf.load(sgf, true);
+
+  if(typeof jrecord == 'string') {
+    alert('Error loading SGF: ' + jrecord);
+    return;
+  }
+
+  if(!(jrecord instanceof JGO.Record)) {
+    alert('Empty SGF or multiple games in one SGF not supported!');
+    return;
+  }
+
+  $('#moves').html(jrecord.normalize()-1); // longest sequence first
+  notifier.changeBoard(jrecord.getBoard());
+  updateGameInfo(jrecord.getRootNode().info);
+  moveNum = 0;
+  move(gotoMove); // also updates game info
+  gotoMove = 0;
+}
+
+function loadURL(url) {
+  $.ajax('http://static.jgoboard.com/get_sgf.php', {
+    dataType: 'jsonp', data: {url: url}, complete: function(resp) {
+      loadSGF(resp.responseJSON);
+    }
+  });
+}
+
+function loadFile() {
+  var files = document.getElementById("file").files;
+
+	if(!files || files.length == 0)
+		alert("File loading either not supported or no file selected!");
+
+	var reader = new FileReader();
+	reader.onload = function() { loadSGF(reader.result); };
+	reader.readAsText(files[0], "UTF-8");
+}
+</script>
+
+</div>
+</body>
+</html>

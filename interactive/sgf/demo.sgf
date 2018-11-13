@@ -1,0 +1,15 @@
+(;GM[1]FF[4]CA[UTF-8]AP[CGoban:3]ST[2]
+RU[Japanese]SZ[19]HA[4]KM[0.00]
+PW[White]PB[Black]AB[dd][pd][dp][pp]
+;W[nc]
+;B[qf]
+;W[hc]C[There are two variations after this node.]
+(;B[fc]
+;W[fq]
+;B[cn]
+;W[nq]
+;B[qn]
+;W[jp])
+(;B[jq]
+;W[cf]
+;B[fc]C[Alternate sequence ends here.]))

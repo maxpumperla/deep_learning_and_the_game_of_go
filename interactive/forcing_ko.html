@@ -1,0 +1,189 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Interactive Board Demo</title>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/iframeSizer.contentWindow.min.js"></script>
+  <link rel="stylesheet" href="css/font-awesome.css" type="text/css">
+  <link rel="stylesheet" href="css/base.css" type="text/css">
+
+</head>
+<body>
+
+<h1>Ko fights and forcing moves</h1>
+
+<div style="text-align: center; width: 100%">
+<div style="display: inline-block;">
+  <div style="float: left;">
+    <div id="board">
+
+      <div class="container">
+        <p class="description" id=0>In this board situation we see a classical ko scenario. Black and white fight for the stone at B8 and it's white's turn.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=0>
+        . o . . . . . . .
+        o x o . . . . . .
+        x . x . . . . . .
+        . x . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . x x x x x x
+        . . . x o o o o o
+        . . . x o . . . .
+      </div>
+
+      <div class="container">
+        <p class="description" id=1>White captures B8 by playing at B7, thereby setting up a ko. Black can't just hit back at B8, as this would bring back the board to where we left off two moves before, violating the ko rule.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=1>
+        . o . . . . . . .
+        o .# o . . . . . .
+        x o x . . . . . .
+        . x . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . x x x x x x
+        . . . x o o o o o
+        . . . x o . . . .
+      </div>
+
+      <div class="container">
+        <p class="description" id=2>However, black has another strong move that requires white's attention. Black plays at H1. While this may not look like much, it threatens a follow-up at G1 to kill white's group in the lower right. The ko in the upper left is important, but not as important as keeping this group alive.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=2>
+        . o . . . . . . .
+        o .# o . . . . . .
+        x o x . . . . . .
+        . x . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . x x x x x x
+        . . . x o o o o o
+        . . . x o . ./ x .
+      </div>
+
+      <div class="container">
+        <p class="description" id=3>White has to react and play G1 to create living shape and make two eyes. The black move at H1 is a so called "ko threat", as it draws the attention away from the ko to threaten a more critical position.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=3>
+        . o . . . . . . .
+        o . o . . . . . .
+        x o x . . . . . .
+        . x . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . x x x x x x
+        . . . x o o o o o
+        . . . x o . o x .
+      </div>
+
+      <div class="container">
+        <p class="description" id=4>After the exchange of the last two moves, the board situation has now altered and black is free to capture the white stone at B7 by playing B8 again. Now the situation is reversed and the ko is forced on white!</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=4>
+        . o . . . . . . .
+        o x o . . . . . .
+        x .# x . . . . . .
+        . x . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . x x x x x x
+        . . . x o o o o o
+        . . . x o . o x .
+      </div>
+
+      <div class="container">
+        <p class="description" id=5>As white does not have any ko threats on the board, white has to play somewhere else, for instance at G7. This is a strong move for white, but isn't of any immediate threat for black.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=5>
+        . o . . . . . . .
+        o x o . . . . . .
+        x . x . . . o . .
+        . x . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . x x x x x x
+        . . . x o o o o o
+        . . . x o . o x .
+      </div>
+
+      <div class="container">
+        <p class="description" id=6>Hence, black is free to close the ko fight by connecting at B7. Black has won the ko fight by using a strong ko threat. In 19x19 games between strong opponents you often see whole-board ko fights involving many groups that can easily go back and forth for 30 moves.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=6>
+        . o . . . . . . .
+        o x o . . . . . .
+        x x x . . . o . .
+        . x . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . x x x x x x
+        . . . x o o o o o
+        . . . x o . o x .
+      </div>
+
+    </div>
+
+    <p class="controls" style="width: 500px;">
+    <a href="#" onclick="move(-5); return false;"><i class="fa fa-backward"></i></a>
+    <a href="#" onclick="move(-1); return false;"><i class="fa fa-step-backward"></i></a>
+    <strong id="move">1</strong> / <strong id="moves">1</strong>
+    <a href="#" onclick="move(1); return false;"><i class="fa fa-step-forward"></i></a>
+    <a href="#" onclick="move(5); return false;"><i class="fa fa-forward"></i></a>
+    </p>
+  </div>
+
+</div>
+</div>
+
+<script type="text/javascript" src="dist/jgoboard-latest.js"></script>
+<script type="text/javascript" src="large/board.js"></script>
+<script type="text/javascript" src="medium/board.js"></script>
+<script type="text/javascript">
+
+  var moveNum = 0;
+  var totalMoves = numMoves();
+  $('#moves').html(totalMoves);
+
+  function numMoves() {
+    var max = 0;
+    $('.jgoboard').each(function() {
+      max = Math.max(this.id, max);
+    });
+    return max + 1;
+  }
+
+  function move(moveDiff) {
+    if (moveNum + moveDiff > totalMoves - 1) {
+      moveNum = totalMoves - 1;
+    } else if (moveNum + moveDiff < 0) {
+      moveNum = 0;
+    } else {
+      moveNum = moveNum + moveDiff;
+    }
+    var moves = document.getElementsByClassName('jgoboard');
+    var descriptions = document.getElementsByClassName('description');
+    for (var index = 0; index < moves.length; index++) {
+      moves[index].style.display = 'none';
+      descriptions[index].style.display = 'none';
+    }
+    moves[moveNum].style.display = 'inline';
+    descriptions[moveNum].style.display = 'inline';
+
+    $('#move').html(moveNum + 1);
+  }
+
+  $(document).ready(function() {
+    $("body").keydown(function(e) {
+      if(e.keyCode == 37) move(-1);
+      else if(e.keyCode == 39) move(1);
+    });
+    move(0);
+  });
+
+</script>
+
+<script type="text/javascript">JGO.auto.init(document, JGO);</script>
+</body>
+</html>

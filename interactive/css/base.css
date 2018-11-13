@@ -1,0 +1,46 @@
+body {
+    font-family: "Lucida Grande",Verdana,"Bitstream Vera Sans",Arial,sans-serif;
+    font-size: 12px;
+    color: #444;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.description {
+  font-size: 16px;
+}
+
+.controls {
+    border: 1px solid #eee;
+    background-color: #f8f8f8;
+    padding: 4px;
+    margin: 0 auto;
+    border-radius: 10px;
+    margin-bottom: 1em;
+    font-size: 16px;
+    text-align: center;
+    color: #666;
+}
+
+.controls strong {
+    display: inline-block;
+    width: 36px;
+}
+
+.controls .fa {
+    padding: 0 4px;
+    font-size: 125%;
+    color: #666;
+}
+
+.commentary {
+    height: 6em;
+    width: 490px;
+    margin-left: 40px;
+}
+
+#lastMove {
+    font-weight: bold;
+}

@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Interactive Board Demo</title>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/iframeSizer.contentWindow.min.js"></script>
+  <link rel="stylesheet" href="css/font-awesome.css" type="text/css">
+  <link rel="stylesheet" href="css/base.css" type="text/css">
+
+</head>
+<body>
+
+<h1>Living under the stones: playing in the territory you just lost</h1>
+
+<div style="text-align: center; width: 100%">
+<div style="display: inline-block;">
+  <div style="float: left;">
+    <div id="board">
+
+      <div class="container">
+        <p class="description" id=0>In this classic live-and-death problem, white can live in the corner, even if it is black's turn. Note that D8 is exposed and puts white in double-atari, meaning threating both groups of marked stones.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=0>
+        . . o . o* o* x . .
+        o o . .# o* o* x . .
+        x x o/ o/ x x x . .
+        . x x x . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+      </div>
+
+      <div class="container">
+        <p class="description" id=1>As it is black's move, naturally black plays D8, the vital point in this example. If it was white's turn, a play at D8 would make the group alive instantly. What can white do now?</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=1>
+        . . o . o o x . .
+        o o . x o o x . .
+        x x o o x x x . .
+        . x x x . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+      </div>
+
+      <div class="container">
+        <p class="description" id=2>The first impulse might be to save the four stones on the right by connecting with D9. This is too greedy. After black captures two white stones at C8, white has only one eye in the corner and dies.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=2>
+        . . o o o o x . .
+        o o .# x o o x . .
+        x x o o x x x . .
+        . x x x . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+      </div>
+
+      <div class="container">
+        <p class="description" id=3>Instead, white should connect at C8 and leave his four stones on the right exposed.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=3>
+        . . o . o o x . .
+        o o o# x o o x . .
+        x x o o x x x . .
+        . x x x . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+      </div>
+
+      <div class="container">
+        <p class="description" id=4>Sure enough, black takes the bait and captures these stones. You might ask: how are we better off than in the first sequence? Well, the captured stones created new space to play in - and the two marked stones have only two liberties!</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=4>
+        . . o x# . . x . .
+        o o o x# . . x . .
+        x x o o x x x . .
+        . x x x . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+      </div>
+
+      <div class="container">
+        <p class="description" id=5>White plays into the area in which he just had stones a move ago.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=5>
+        . . o x . . x . .
+        o o o x o . x . .
+        x x o o x x x . .
+        . x x x . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+      </div>
+
+      <div class="container">
+        <p class="description" id=6>If black tries to save his two stones by approaching from the outside with F9...</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=6>
+        . . o x . x x . .
+        o o o x o . x . .
+        x x o o x x x . .
+        . x x x . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+      </div>
+
+      <div class="container">
+        <p class="description" id=7>... white will just capture the stones, making a second eye in the process and thereby a living group. All other sequences lead to a living white group as well. This particular technique of playing in the territory freed by your own captured stones is called "under the stones". </p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=7>
+        . . o .# o x x . .
+        o o o .# o . x . .
+        x x o o x x x . .
+        . x x x . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+        . . . . . . . . .
+      </div>
+
+
+    </div>
+
+    <p class="controls" style="width: 500px;">
+    <a href="#" onclick="move(-5); return false;"><i class="fa fa-backward"></i></a>
+    <a href="#" onclick="move(-1); return false;"><i class="fa fa-step-backward"></i></a>
+    <strong id="move">1</strong> / <strong id="moves">1</strong>
+    <a href="#" onclick="move(1); return false;"><i class="fa fa-step-forward"></i></a>
+    <a href="#" onclick="move(5); return false;"><i class="fa fa-forward"></i></a>
+    </p>
+  </div>
+
+</div>
+</div>
+
+<script type="text/javascript" src="dist/jgoboard-latest.js"></script>
+<script type="text/javascript" src="large/board.js"></script>
+<script type="text/javascript" src="medium/board.js"></script>
+<script type="text/javascript">
+
+  var moveNum = 0;
+  var totalMoves = numMoves();
+  $('#moves').html(totalMoves);
+
+  function numMoves() {
+    var max = 0;
+    $('.jgoboard').each(function() {
+      max = Math.max(this.id, max);
+    });
+    return max + 1;
+  }
+
+  function move(moveDiff) {
+    if (moveNum + moveDiff > totalMoves - 1) {
+      moveNum = totalMoves - 1;
+    } else if (moveNum + moveDiff < 0) {
+      moveNum = 0;
+    } else {
+      moveNum = moveNum + moveDiff;
+    }
+    var moves = document.getElementsByClassName('jgoboard');
+    var descriptions = document.getElementsByClassName('description');
+    for (var index = 0; index < moves.length; index++) {
+      moves[index].style.display = 'none';
+      descriptions[index].style.display = 'none';
+    }
+    moves[moveNum].style.display = 'inline';
+    descriptions[moveNum].style.display = 'inline';
+
+    $('#move').html(moveNum + 1);
+  }
+
+  $(document).ready(function() {
+    $("body").keydown(function(e) {
+      if(e.keyCode == 37) move(-1);
+      else if(e.keyCode == 39) move(1);
+    });
+    move(0);
+  });
+
+</script>
+
+<script type="text/javascript">JGO.auto.init(document, JGO);</script>
+</body>
+</html>

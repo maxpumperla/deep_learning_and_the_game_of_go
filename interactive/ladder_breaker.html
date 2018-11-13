@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Interactive Board Demo</title>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/iframeSizer.contentWindow.min.js"></script>
+  <link rel="stylesheet" href="css/font-awesome.css" type="text/css">
+  <link rel="stylesheet" href="css/base.css" type="text/css">
+
+</head>
+<body>
+
+<h1>Ladder breakers and waiting for the right moment.</h1>
+
+<div style="text-align: center; width: 100%">
+<div style="display: inline-block;">
+  <div style="float: left;">
+    <div id="board">
+      <div class="container">
+        <p class="description" id=0>We know that in this situation the white stone at D4 can be caught in a ladder. That does not necessarily mean it is dead already.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=0>
+        .........
+        .........
+        .........
+        .........
+        ...x.....
+        ..xo.....
+        ...xx....
+        .........
+        .........
+      </div>
+
+      <div class="container">
+        <p class="description" id=1>If we slightly alter the situation and add a white stone at H7, the outcome of playing the ladder will be completely different!</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=1>
+        .........
+        .........
+        .......o.
+        .........
+        ...x.....
+        ..xo.....
+        ...xx....
+        .........
+        .........
+      </div>
+
+      <div class="container">
+        <p class="description" id=2>Sure, black can still chase white for a little, but after black H6 in this diagram, white can now connect to its stone at H7.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=2>
+        .........
+        .........
+        .....x.o.
+        ....xoox.
+        ...xoox..
+        ..xoox...
+        ...xx....
+        .........
+        .........
+      </div>
+
+      <div class="container">
+        <p class="description" id=3>After connecting at G7, the white group has now three liberties, namely at G8, H8 and J7. This is a game changer for both players. </p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=3>
+        .........
+        .........
+        .....xoo.
+        ....xoox.
+        ...xoox..
+        ..xoox...
+        ...xx....
+        .........
+        .........
+      </div>
+
+      <div class="container">
+        <p class="description" id=4>If black now insists by pushing to J7, white is still left with two liberties and can escape the ladder.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=4>
+        .........
+        .........
+        .....xoox
+        ....xoox.
+        ...xoox..
+        ..xoox...
+        ...xx....
+        .........
+        .........
+      </div>
+
+      <div class="container">
+        <p class="description" id=5>White can essentially choose any of the cutting points along the ladder and goes for D6 here. This puts both E6 and D5 in atari! Black can at most save one stone with the next move and his position collapses.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=5>
+        .........
+        .........
+        .....xoox
+        ...oxoox.
+        ...xoox..
+        ..xoox...
+        ...xx....
+        .........
+        .........
+      </div>
+
+      <div class="container">
+        <p class="description" id=6>If black protects at D5, white captures E6. Conversely, if black protects E6, white will capture D5. Either way, black is doomed. The ladder has been broken by the white stone at H7.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=6>
+        .........
+        .........
+        ....oxoox
+        ...o.oox.
+        ..xxoox..
+        ..xoox...
+        ...xx....
+        .........
+        .........
+      </div>
+
+      <div class="container">
+        <p class="description" id=7>Coming back to the original situation, we now see that while locally the white stone at D4 can be chased by a ladder, the outcome depends on the blobal board situation. Even if you don't have a ladder breaker in place, be patient! Your stone might not be dead yet.</p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=7>
+        .........
+        .........
+        .......o.
+        .........
+        ...x.....
+        ..xo.....
+        ...xx....
+        .........
+        .........
+      </div>
+
+      <div class="container">
+        <p class="description" id=8>A ladder breaker might save your stone, which is obviously good, but it may also force black to capture at E4. For black this is a move wasted - a move that should not have been necessary. In any case, we say that the white stone at D4 has "potential" or "aji". Especially for beginners it can be hard to accept that even such a simple situation is of unclear outcome and requires patience to turn potential into profit. </p>
+      </div>
+      <div class="jgoboard" data-jgostyle="JGO.BOARD.largeWalnut" id=8>
+        .........
+        .........
+        .......o.
+        .........
+        ...x.....
+        ..x.x....
+        ...xx....
+        .........
+        .........
+      </div>
+
+    </div>
+
+    <p class="controls" style="width: 500px;">
+    <a href="#" onclick="move(-5); return false;"><i class="fa fa-backward"></i></a>
+    <a href="#" onclick="move(-1); return false;"><i class="fa fa-step-backward"></i></a>
+    <strong id="move">1</strong> / <strong id="moves">1</strong>
+    <a href="#" onclick="move(1); return false;"><i class="fa fa-step-forward"></i></a>
+    <a href="#" onclick="move(5); return false;"><i class="fa fa-forward"></i></a>
+    </p>
+  </div>
+
+</div>
+</div>
+
+<script type="text/javascript" src="dist/jgoboard-latest.js"></script>
+<script type="text/javascript" src="large/board.js"></script>
+<script type="text/javascript" src="medium/board.js"></script>
+<script type="text/javascript">
+
+  var moveNum = 0;
+  var totalMoves = numMoves();
+  $('#moves').html(totalMoves);
+
+  function numMoves() {
+    var max = 0;
+    $('.jgoboard').each(function() {
+      max = Math.max(this.id, max);
+    });
+    return max + 1;
+  }
+
+  function move(moveDiff) {
+    if (moveNum + moveDiff > totalMoves - 1) {
+      moveNum = totalMoves - 1;
+    } else if (moveNum + moveDiff < 0) {
+      moveNum = 0;
+    } else {
+      moveNum = moveNum + moveDiff;
+    }
+    var moves = document.getElementsByClassName('jgoboard');
+    var descriptions = document.getElementsByClassName('description');
+    for (var index = 0; index < moves.length; index++) {
+      moves[index].style.display = 'none';
+      descriptions[index].style.display = 'none';
+    }
+    moves[moveNum].style.display = 'inline';
+    descriptions[moveNum].style.display = 'inline';
+
+    $('#move').html(moveNum + 1);
+  }
+
+  $(document).ready(function() {
+    $("body").keydown(function(e) {
+      if(e.keyCode == 37) move(-1);
+      else if(e.keyCode == 39) move(1);
+    });
+    move(0);
+  });
+
+</script>
+
+<script type="text/javascript">JGO.auto.init(document, JGO);</script>
+</body>
+</html>
