@@ -1,7 +1,7 @@
 import enum
 import random
 
-from dlgo.agent import Agent
+from dlgo.agent.base import Agent
 
 __all__ = [
     'MinimaxAgent',
