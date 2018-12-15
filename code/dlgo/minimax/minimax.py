@@ -18,10 +18,10 @@ class GameResult(enum.Enum):
 
 def reverse_game_result(game_result):
     if game_result == GameResult.loss:
-        return game_result.win
+        return GameResult.win.value
     if game_result == GameResult.win:
-        return game_result.loss
-    return GameResult.draw
+        return GameResult.loss.value
+    return GameResult.draw.value
 
 
 # tag::minimax-signature[]
