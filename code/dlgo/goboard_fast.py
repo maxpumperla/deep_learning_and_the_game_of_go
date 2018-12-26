@@ -232,10 +232,7 @@ class Board():
         Returns None if the point is empty, or a GoString if there is
         a stone on that point.
         """
-        string = self._grid.get(point)
-        if string is None:
-            return None
-        return string
+        return self._grid.get(point)
 
     def __eq__(self, other):
         return isinstance(other, Board) and \
