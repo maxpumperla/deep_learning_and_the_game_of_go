@@ -10,7 +10,7 @@ def sigmoid_double(x):
 
 
 def sigmoid(z):
-    return np.vectorize(sigmoid_double)(z)
+    return np.reciprocal(np.add(1.0, np.exp(-z)))
 # end::sigmoid[]
 
 
@@ -20,7 +20,7 @@ def sigmoid_prime_double(x):
 
 
 def sigmoid_prime(z):
-    return np.vectorize(sigmoid_prime_double)(z)
+    return np.multiply(sigmoid(z),np.subtract(1,sigmoid(z)))
 # end::sigmoid_prime[]
 
 
