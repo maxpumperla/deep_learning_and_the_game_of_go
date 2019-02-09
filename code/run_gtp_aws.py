@@ -4,7 +4,11 @@ from dlgo.agent.predict import load_prediction_agent
 from dlgo.agent import termination
 import h5py
 
-model_file = h5py.File("agents/betago.hdf5", "r")
+import os
+adirCode=os.path.dirname(os.path.abspath(__file__))
+
+afileBetago=os.path.join(adirCode,"agents/betago.hdf5")
+model_file = h5py.File(afileBetago, "r")
 agent = load_prediction_agent(model_file)
 strategy = termination.get("opponent_passes")
 termination_agent = termination.TerminationAgent(agent, strategy)

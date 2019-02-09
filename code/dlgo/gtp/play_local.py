@@ -147,7 +147,11 @@ class LocalGtpBot:
 
 
 if __name__ == "__main__":
-    bot = load_prediction_agent(h5py.File("../../agents/betago.hdf5", "r"))
+    import os
+    adirCode=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+    afileBetago=os.path.join(adirCode,"agents/betago.hdf5")
+    bot = load_prediction_agent(h5py.File(afileBetago, "r"))
     gnu_go = LocalGtpBot(go_bot=bot, termination=PassWhenOpponentPasses(),
                          handicap=0, opponent='pachi', )
     gnu_go.run()

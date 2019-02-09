@@ -16,8 +16,12 @@ from dlgo.goboard_fast import GameState
 from keras.callbacks import ModelCheckpoint
 import h5py
 import numpy as np
+import os
+
+adirCode=os.path.dirname(os.path.abspath(__file__))
 
 class AlphaGoAgentTest(unittest.TestCase):
+
     def test_1_supervised_learning(self):
         rows, cols = 19, 19
         encoder = AlphaGoEncoder()
@@ -33,14 +37,14 @@ class AlphaGoAgentTest(unittest.TestCase):
         outputs = alphago_sl_policy.predict(inputs)
         assert(outputs.shape == (10, 361))
 
-        with h5py.File('test_alphago_sl_policy.h5', 'w') as sl_agent_out:
+        with h5py.File(os.path.join(adirCode,'test_alphago_sl_policy.h5'), 'w') as sl_agent_out:
             alphago_sl_agent.serialize(sl_agent_out)
 
     def test_2_reinforcement_learning(self):
         encoder = AlphaGoEncoder()
 
-        sl_agent = load_prediction_agent(h5py.File('test_alphago_sl_policy.h5'))
-        sl_opponent = load_prediction_agent(h5py.File('test_alphago_sl_policy.h5'))
+        sl_agent = load_prediction_agent(h5py.File(os.path.join(adirCode,'test_alphago_sl_policy.h5')))
+        sl_opponent = load_prediction_agent(h5py.File(os.path.join(adirCode,'test_alphago_sl_policy.h5')))
 
         alphago_rl_agent = PolicyAgent(sl_agent.model, encoder)
         opponent = PolicyAgent(sl_opponent.model, encoder)
@@ -50,10 +54,10 @@ class AlphaGoAgentTest(unittest.TestCase):
 
         alphago_rl_agent.train(experience)
 
-        with h5py.File('test_alphago_rl_policy.h5', 'w') as rl_agent_out:
+        with h5py.File(os.path.join(adirCode,'test_alphago_rl_policy.h5'), 'w') as rl_agent_out:
             alphago_rl_agent.serialize(rl_agent_out)
 
-        with h5py.File('test_alphago_rl_experience.h5', 'w') as exp_out:
+        with h5py.File(os.path.join(adirCode,'test_alphago_rl_experience.h5'), 'w') as exp_out:
            experience.serialize(exp_out)        
 
     def test_3_alphago_value(self):
@@ -64,17 +68,17 @@ class AlphaGoAgentTest(unittest.TestCase):
 
         alphago_value = ValueAgent(alphago_value_network, encoder)
 
-        experience = load_experience(h5py.File('test_alphago_rl_experience.h5', 'r'))
+        experience = load_experience(h5py.File(os.path.join(adirCode,'test_alphago_rl_experience.h5'), 'r'))
 
         alphago_value.train(experience)
 
-        with h5py.File('test_alphago_value.h5', 'w') as value_agent_out:
+        with h5py.File(os.path.join(adirCode,'test_alphago_value.h5', 'w')) as value_agent_out:
             alphago_value.serialize(value_agent_out)
 
     def test_4_alphago_mcts(self):
-        fast_policy = load_prediction_agent(h5py.File('test_alphago_sl_policy.h5', 'r'))
-        strong_policy = load_policy_agent(h5py.File('test_alphago_rl_policy.h5', 'r'))
-        value = load_value_agent(h5py.File('test_alphago_value.h5', 'r'))
+        fast_policy = load_prediction_agent(h5py.File(os.path.join(adirCode,'test_alphago_sl_policy.h5'), 'r'))
+        strong_policy = load_policy_agent(h5py.File(os.path.join(adirCode,'test_alphago_rl_policy.h5'), 'r'))
+        value = load_value_agent(h5py.File(os.path.join(adirCode,'test_alphago_value.h5'), 'r'))
 
         alphago = AlphaGoMCTS(strong_policy, fast_policy, value,
                               num_simulations=20, depth=5, rollout_limit=10)

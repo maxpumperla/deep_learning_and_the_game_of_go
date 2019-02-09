@@ -3,6 +3,8 @@ import six.moves.cPickle as pickle
 import gzip
 import numpy as np
 
+import os
+adirCode=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def encode_label(j):  # <1>
     e = np.zeros((10, 1))
@@ -23,7 +25,8 @@ def shape_data(data):
 
 
 def load_data():
-    with gzip.open('mnist.pkl.gz', 'rb') as f:
+    afileMnist=os.path.join(adirCode,'dlgo/nn/mnist.pkl.gz')
+    with gzip.open(afileMnist, 'rb') as f:
         train_data, validation_data, test_data = pickle.load(f)  # <4>
 
     return shape_data(train_data), shape_data(test_data)  # <5>

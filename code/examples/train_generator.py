@@ -7,6 +7,9 @@ from keras.models import Sequential
 from keras.layers.core import Dense
 from keras.callbacks import ModelCheckpoint  # <1>
 
+import os
+adirCode=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # <1> With model checkpoints we can store progress for time-consuming experiments
 # end::train_generator_imports[]
 
@@ -40,12 +43,13 @@ model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accura
 # tag::train_generator_fit[]
 epochs = 5
 batch_size = 128
+afileCheckpoint=os.path.join(adirCode,'../checkpoints/small_model_epoch_{epoch}.h5')
 model.fit_generator(generator=generator.generate(batch_size, num_classes),  # <1>
                     epochs=epochs,
                     steps_per_epoch=generator.get_num_samples() / batch_size,  # <2>
                     validation_data=test_generator.generate(batch_size, num_classes),  # <3>
                     validation_steps=test_generator.get_num_samples() / batch_size,  # <4>
-                    callbacks=[ModelCheckpoint('../checkpoints/small_model_epoch_{epoch}.h5')])  # <5>
+                    callbacks=[ModelCheckpoint(afileCheckpoint)])  # <5>
 
 model.evaluate_generator(generator=test_generator.generate(batch_size, num_classes),
                          steps=test_generator.get_num_samples() / batch_size)  # <6>
