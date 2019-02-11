@@ -9,6 +9,8 @@ pip install dlgo
 On the other hand, this repository at the same time contains [Code](https://github.com/maxpumperla/deep_learning_and_the_game_of_go/tree/master/code), and sample chapters for the book "Deep Learning and the Game of Go" (Manning), available for early access [here](https://www.manning.com/books/deep-learning-and-the-game-of-go), which ties into the library and teaches its components bit by biy. If you're following the code samples from the book, check out the branches for
 individual chapters.
 
+*Note for contributors*: To ensure the book stays in sync, consider requesting changes and submitting pull requests against the `improvements` branch, instead of `master` (which we keep reserved for bug fixes etc.).
+
 ![dl_go_cover](dl_go_cover.jpg)
 
 ## Playable demos
