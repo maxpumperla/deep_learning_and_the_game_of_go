@@ -19,12 +19,14 @@ def shape_data(data):
 
     labels = [encode_label(y) for y in data[1]]  # <2>
 
-    return zip(features, labels)  # <3>
+    return list(zip(features, labels))  # <3>
 
 
 def load_data():
     with gzip.open('mnist.pkl.gz', 'rb') as f:
-        train_data, validation_data, test_data = pickle.load(f)  # <4>
+        data = pickle._Unpickler(f)
+        data.encoding = 'latin1'  # set encoding
+        train_data, validation_data, test_data = data.load()
 
     return shape_data(train_data), shape_data(test_data)  # <5>
 
