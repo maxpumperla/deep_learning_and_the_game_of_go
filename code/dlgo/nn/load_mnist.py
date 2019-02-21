@@ -19,14 +19,25 @@ def shape_data(data):
 
     labels = [encode_label(y) for y in data[1]]  # <2>
 
-    return zip(features, labels)  # <3>
+    return list(zip(features, labels))  # <3>
 
+
+def load_data_impl():
+    # file retrieved by:
+    #   wget https://s3.amazonaws.com/img-datasets/mnist.npz -O code/dlgo/nn/mnist.npz
+    # code based on:
+    #   site-packages/keras/datasets/mnist.py
+    path = 'mnist.npz'
+    f = np.load(path)
+    x_train, y_train = f['x_train'], f['y_train']
+    x_test, y_test = f['x_test'], f['y_test']
+    f.close()
+    return (x_train, y_train), (x_test, y_test)
 
 def load_data():
-    with gzip.open('mnist.pkl.gz', 'rb') as f:
-        train_data, validation_data, test_data = pickle.load(f)  # <4>
+    train_data, test_data = load_data_impl()
+    return shape_data(train_data), shape_data(test_data)
 
-    return shape_data(train_data), shape_data(test_data)  # <5>
 
 # <1> We flatten the input images to feature vectors of length 784.
 # <2> All labels are one-hot encoded.
