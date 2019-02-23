@@ -25,7 +25,7 @@ def sigmoid_prime(z):
 
 
 # tag::layer[]
-class Layer:  # <1>
+class Layer(object):  # <1>
     def __init__(self):
         self.params = []
 
