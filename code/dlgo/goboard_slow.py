@@ -108,7 +108,7 @@ class Board():  # <1>
                     continue
                 if neighbor_string is not string:
                     neighbor_string.add_liberty(point)
-            self._grid[point] = None
+            del(self._grid[point])
 # <1> Removing a string can create liberties for other strings.
 # end::board_remove[]
 
