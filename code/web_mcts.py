@@ -6,7 +6,7 @@ BOARD_SIZE = 5
 
 def main():
     bot = mcts.MCTSAgent(700, temperature=1.4)
-    web_app = httpfrontend.get_web_app(bot)
+    web_app = httpfrontend.get_web_app({'mcts':bot})
     web_app.run()
 
 
