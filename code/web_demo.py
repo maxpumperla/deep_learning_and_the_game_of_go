@@ -35,7 +35,7 @@ def main():
         bots['ac'] = ac_bot
 
     web_app = httpfrontend.get_web_app(bots)
-    web_app.run(host=args.bind_address, port=args.port)
+    web_app.run(host=args.bind_address, port=args.port, threaded=False)
 
 
 if __name__ == '__main__':
