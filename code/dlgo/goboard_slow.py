@@ -214,10 +214,10 @@ class GameState():
         next_situation = (player.other, next_board)
         past_state = self.previous_state
 
-        # Assume ko is violated.
-        ko_violated = True
-
         while past_state is not None:
+            # Assume ko is violated.
+            ko_violated = True
+
             past_board = past_state.situation[1]
             next_board = next_situation[1]
 
@@ -226,7 +226,7 @@ class GameState():
                     past_stone = past_board.get(Point(row=row, col=col))
                     next_stone = next_board.get(Point(row=row, col=col))
 
-                    # If a point/player between the boards don't match, ko is
+                    # If a point/player between the boards does not match, ko is
                     # not violated.
                     if past_stone != next_stone:
                         ko_violated = False
