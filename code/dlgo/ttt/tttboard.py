@@ -102,14 +102,14 @@ class GameState:
             if all(self.board.get(Point(row, col)) == player for col in COLS):
                 return True
         # Diagonal UL to LR
-        if self.board.get(Point(1, 1)) == player and \
-                self.board.get(Point(2, 2)) == player and \
-                self.board.get(Point(3, 3)) == player:
+        if self.board.get(DIAG_1[0]) == player and \
+                self.board.get(DIAG_1[1]) == player and \
+                self.board.get(DIAG_1[2]) == player:
             return True
         # Diagonal UR to LL
-        if self.board.get(Point(1, 3)) == player and \
-                self.board.get(Point(2, 2)) == player and \
-                self.board.get(Point(3, 1)) == player:
+        if self.board.get(DIAG_2[0]) == player and \
+                self.board.get(DIAG_2[1]) == player and \
+                self.board.get(DIAG_2[2]) == player:
             return True
         return False
 
