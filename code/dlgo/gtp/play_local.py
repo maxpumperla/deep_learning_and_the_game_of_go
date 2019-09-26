@@ -33,8 +33,12 @@ class LocalGtpBot:
 
         cmd = self.opponent_cmd(opponent)  # <4>
         pipe = subprocess.PIPE
+        # Depending on your OS, you may need to set bufsize=0 to prevent
+        # readline() from blocking.
+        # See: https://github.com/maxpumperla/deep_learning_and_the_game_of_go/issues/44
         self.gtp_stream = subprocess.Popen(
-            cmd, stdin=pipe, stdout=pipe  # <5>
+            cmd, stdin=pipe, stdout=pipe,  # <5>
+            bufsize=0
         )
 
     @staticmethod
@@ -60,7 +64,7 @@ class LocalGtpBot:
         succeeded = False
         result = ''
         while not succeeded:
-            line = self.gtp_stream.stdout.readline()
+            line = self.gtp_stream.stdout.readline().decode('utf-8')
             if line[0] == '=':
                 succeeded = True
                 line = line.strip()
