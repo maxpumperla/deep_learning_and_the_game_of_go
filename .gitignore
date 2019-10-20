@@ -111,6 +111,10 @@ stem*.png
 # Mac OS nonsense
 .DS_Store
 
+# SublimeText
+*.sublime-project
+*.sublime-workspace
+
 code/examples/kgs_index.html
 code/examples/test_samples.py
 code/examples/data
