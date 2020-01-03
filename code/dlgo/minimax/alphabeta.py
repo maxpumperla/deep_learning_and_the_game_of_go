@@ -40,7 +40,7 @@ def alpha_beta_result(game_state, max_depth, best_black, best_white, eval_fn):
             if best_so_far > best_white:                       # <8>
                 best_white = best_so_far                       # <8>
             outcome_for_black = -1 * best_so_far               # <9>
-            if outcome_for_black < best_black:                 # <9>
+            if outcome_for_black <= best_black:                # <9>
                 return best_so_far                             # <9>
 # end::alpha-beta-prune-2[]
 # tag::alpha-beta-prune-3[]
@@ -48,7 +48,7 @@ def alpha_beta_result(game_state, max_depth, best_black, best_white, eval_fn):
             if best_so_far > best_black:                       # <10>
                 best_black = best_so_far                       # <10>
             outcome_for_white = -1 * best_so_far               # <11>
-            if outcome_for_white < best_white:                 # <11>
+            if outcome_for_white <= best_white:                # <11>
                 return best_so_far                             # <11>
 # end::alpha-beta-prune-3[]
 # tag::alpha-beta-prune-4[]
@@ -86,9 +86,9 @@ class AlphaBetaAgent(Agent):
                 best_moves = [possible_move]
                 best_score = our_best_outcome
                 if game_state.next_player == Player.black:
-                    best_black = best_score
+                    best_black = best_score-1
                 elif game_state.next_player == Player.white:
-                    best_white = best_score
+                    best_white = best_score-1
             elif our_best_outcome == best_score:
                 # This is as good as our previous best move.
                 best_moves.append(possible_move)
