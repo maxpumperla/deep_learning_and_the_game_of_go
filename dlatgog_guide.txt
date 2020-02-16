@@ -1,0 +1,30 @@
+(install Python [v > 3.6])
+
+(install git)
+
+cd <folder>
+
+git clone https://github.com/eric-downes/deep_learning_and_the_game_of_go <project name>
+
+cd <project name>
+
+python -m venv <venv name>
+
+(If Windows:)
+source <venv name>/Scripts/activate
+(Else, Unix:)
+source <venv name>/bin/activate
+
+python -m pip install -U pip
+
+pip install -r code/requirements.txt
+
+(at this point, setup should be complete)
+
+cd code/examples
+
+python create_bot.py
+
+python serve_bot.py
+
+(now open web browser and go to <127.0.0.1:5000/static/play_predict_19.html>)
