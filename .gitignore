@@ -115,3 +115,4 @@ stem*.png
 ./data
 
 node_modules
+*.h5
