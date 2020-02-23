@@ -111,8 +111,9 @@ stem*.png
 # Mac OS nonsense
 .DS_Store
 
-./kgs_index.html
-./data
+code/examples/kgs_index.html
+code/examples/test_samples.py
+code/examples/data
 
 node_modules
 *.h5
