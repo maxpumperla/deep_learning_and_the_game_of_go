@@ -32,7 +32,7 @@ def main():
 	model = Sequential()
 	network_layers = large.layers(input_shape)
 	for layer in network_layers:
-	    model.add(layer)
+		model.add(layer)
 	model.add(Dense(nb_classes, activation='softmax'))
 	model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
 
