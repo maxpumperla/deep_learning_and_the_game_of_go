@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.join(dir_path, '..'))
 
 # tag::e2e_imports[]
 import h5py
+import argparse
 
 from keras.models import Sequential
 from keras.layers import Dense
@@ -18,6 +19,11 @@ from dlgo.networks import large
 # end::e2e_imports[]
 
 def main():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--epochs', '-e', default=20, type=int,
+		help="Training epochs. Default is 20")
+
+	args = parser.parse_args()
 	# tag::e2e_processor[]
 	go_board_rows, go_board_cols = 19, 19
 	nb_classes = go_board_rows * go_board_cols
@@ -36,7 +42,7 @@ def main():
 	model.add(Dense(nb_classes, activation='softmax'))
 	model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
 
-	model.fit(X, y, batch_size=128, epochs=20, verbose=1)
+	model.fit(X, y, batch_size=128, epochs=args.epochs, verbose=1)
 	# end::e2e_model[]
 
 	# tag::e2e_agent[]
