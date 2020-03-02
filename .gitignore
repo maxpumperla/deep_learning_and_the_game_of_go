@@ -115,9 +115,12 @@ stem*.png
 *.sublime-project
 *.sublime-workspace
 
+# Specific ignores
+**/node_modules
 code/examples/kgs_index.html
 code/examples/test_samples.py
-code/examples/data
+code/examples/data/
+code/agents/
 
-node_modules
 *.h5
+*.hdf5
