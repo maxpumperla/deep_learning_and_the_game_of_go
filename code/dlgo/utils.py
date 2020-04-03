@@ -1,4 +1,8 @@
+import platform
+import subprocess
+
 import numpy as np
+
 # tag::print_utils[]
 from dlgo import gotypes
 
@@ -46,6 +50,12 @@ def coords_from_point(point):
         point.row
     )
 
+def clear_screen():
+    # see https://stackoverflow.com/a/23075152/323316
+    if platform.system() == "Windows":
+        subprocess.Popen("cls", shell=True).communicate()
+    else:  # Linux and Mac
+        print("\033c", end="")
 
 # NOTE: MoveAge is only used in chapter 13, and doesn't make it to the main text.
 # This feature will only be implemented in goboard_fast.py so as not to confuse
