@@ -55,7 +55,8 @@ def clear_screen():
     if platform.system() == "Windows":
         subprocess.Popen("cls", shell=True).communicate()
     else:  # Linux and Mac
-        print("\033c", end="")
+        # the link uses print("\033c", end=""), but this is the original sequence given in the book.
+        print(chr(27) + "[2J")
 
 # NOTE: MoveAge is only used in chapter 13, and doesn't make it to the main text.
 # This feature will only be implemented in goboard_fast.py so as not to confuse

@@ -14,7 +14,6 @@ def main():
         gotypes.Player.black: agent.naive.RandomBot(),
         gotypes.Player.white: agent.naive.RandomBot(),
     }
-
     while not game.is_over():
         time.sleep(0.3)  # <1>
 
