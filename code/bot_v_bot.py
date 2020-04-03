@@ -15,18 +15,13 @@ def main():
         gotypes.Player.white: agent.naive.RandomBot(),
     }
 
-    player = None
-    bot_move = None
     while not game.is_over():
         time.sleep(0.3)  # <1>
 
         clear_screen()   # <2>
         print_board(game.board)
-        if player:
-            print_move(player, bot_move)
-
         bot_move = bots[game.next_player].select_move(game)
-        player = game.next_player
+        print_move(game.next_player, bot_move)
         game = game.apply_move(bot_move)
 
 
