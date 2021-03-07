@@ -7,7 +7,7 @@ setup(name='dlgo',
       url='http://github.com/maxpumperla/deep_learning_and_the_game_of_go',
       install_requires=[
             'numpy<=1.14.5', 
-            'tensorflow==1.10.1', 
+            'tensorflow>=1.10.1', 
             'keras==2.2.2', 
             'gomill', 
             'Flask>=0.10.1', 
