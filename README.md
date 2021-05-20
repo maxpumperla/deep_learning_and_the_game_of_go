@@ -17,9 +17,9 @@ individual chapters.
 
 The book is all about getting you started to create your own bots. To make the experience more fun and interactive, we built and deployed several bots showcasing the techniques of the respective chapter. So far you can play:
 
-- **Chapter 4** A tiny tree search bot on a 5x5 board [here](https://www.badukai.com/demos/static/play_mcts_55.html).
-- **Chapter 7** A full 19x19 bot powered by a deep neural network trained to predict human moves [here](https://www.badukai.com/demos/static/play_predict_19.html)
-- **Chapter 9** A bot playing on a 9x9 board, using policy gradients, [here](https://www.badukai.com/demos/static/play_pg_99.html)
+- **Chapter 4** A tiny tree search bot on a 5x5 board [here](https://demos.badukai.com/static/play_mcts_55.html).
+- **Chapter 7** A full 19x19 bot powered by a deep neural network trained to predict human moves [here](https://demos.badukai.com/static/play_predict_19.html)
+- **Chapter 9** A bot playing on a 9x9 board, using policy gradients, [here](https://demos.badukai.com/static/play_pg_99.html)
 
 These demos will be available in the [liveBook](https://www.manning.com/books/deep-learning-and-the-game-of-go) version of the book as well.
 
