@@ -34,7 +34,7 @@ def main():
 	# end::e2e_processor[]
 
 	# tag::e2e_model[]
-	input_shape = (encoder.num_planes, go_board_rows, go_board_cols)
+	input_shape = (go_board_rows, go_board_cols, encoder.num_planes)
 	model = Sequential()
 	network_layers = large.layers(input_shape)
 	for layer in network_layers:
