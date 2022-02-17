@@ -16,6 +16,8 @@ from dlgo.data.parallel_processor import GoDataProcessor
 from dlgo.encoders.sevenplane import SevenPlaneEncoder
 from dlgo.httpfrontend import get_web_app
 from dlgo.networks import large
+
+from definitions import CODE_ROOT_DIR
 # end::e2e_imports[]
 
 def main():
@@ -47,7 +49,8 @@ def main():
 
 	# tag::e2e_agent[]
 	deep_learning_bot = DeepLearningAgent(model, encoder)
-	model_file = h5py.File("../agents/deep_bot.h5", "w")
+	fpath = os.path.join(CODE_ROOT_DIR, "agents/deep_bot.h5")
+	model_file = h5py.File(fpath, "w")
 	deep_learning_bot.serialize(model_file)
 	model_file.close()
 	# end::e2e_agent[]
