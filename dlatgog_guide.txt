@@ -2,6 +2,8 @@
 
 (install git)
 
+(if using a GPU, install CUDA runtime [v > 11.2])
+
 cd <folder>
 
 git clone https://github.com/eric-downes/deep_learning_and_the_game_of_go <project name>
@@ -19,7 +21,7 @@ python -m pip install -U pip
 
 pip install -r code/requirements.txt
 
-(at this point, setup should be complete)
+(at this point, setup is complete)
 
 cd code/examples
 
@@ -28,3 +30,4 @@ python create_bot.py
 python serve_bot.py
 
 (now open web browser and go to <127.0.0.1:5000/static/play_predict_19.html>)
+
