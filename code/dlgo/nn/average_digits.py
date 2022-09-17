@@ -52,7 +52,7 @@ b = -45  # <2>
 print(predict(x_3, W, b))   # <3>
 print(predict(x_18, W, b))  # <4> 0.96
 
-# <1> A simple prediction is defined by applying sigmoid to the output of np.doc(W, x) + b.
+# <1> A simple prediction is defined by applying sigmoid to the output of np.dot(W, x) + b.
 # <2> Based on the examples computed so far we set the bias term to -45.
 # <3> The prediction for the example with a "4" is close to zero.
 # <5> The prediction for an "8" is 0.96 here. We seem to be onto something with our heuristic.
