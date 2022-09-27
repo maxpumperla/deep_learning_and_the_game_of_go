@@ -76,6 +76,67 @@ class BoardTest(unittest.TestCase):
             [Point(3, 2), Point(2, 3), Point(1, 3)],
             black_string.liberties)
 
+    def test_GameState_does_move_violate_ko(self):
+        # Testing Figures 3.5-3.7.
+        game = GameState.new_game(6)
+        board = game.board
+        board.place_stone(Player.black, Point(1, 2))
+        board.place_stone(Player.black, Point(1, 3))
+        board.place_stone(Player.white, Point(1, 4))
+        board.place_stone(Player.white, Point(1, 6))
+        board.place_stone(Player.black, Point(2, 2))
+        board.place_stone(Player.white, Point(2, 3))
+        board.place_stone(Player.black, Point(2, 4))
+        board.place_stone(Player.black, Point(2, 5))
+        board.place_stone(Player.white, Point(2, 6))
+        board.place_stone(Player.black, Point(3, 2))
+        board.place_stone(Player.white, Point(3, 3))
+        board.place_stone(Player.white, Point(3, 4))
+        board.place_stone(Player.white, Point(3, 5))
+
+        next_player, _ = game.situation
+        self.assertTrue(next_player, Player.black)
+
+        move = Move(Point(1, 5), is_pass=False, is_resign=False)
+        self.assertFalse(game.does_move_violate_ko(Player.black, move))
+        move = move.play(Point(1, 5))
+        game = game.apply_move(move)
+
+        next_player, _ = game.situation
+        self.assertTrue(next_player, Player.white)
+
+        # Verify white can play at 1,4.
+        move = Move(Point(1, 4), is_pass=False, is_resign=False)
+        self.assertFalse(game.does_move_violate_ko(Player.white, move))
+        move = move.play(Point(1, 4))
+        game = game.apply_move(move)
+
+        # Testing a real Ko.  Figure 2.5
+        game = GameState.new_game(5)
+        board = game.board
+        board.place_stone(Player.black, Point(2, 2))
+        board.place_stone(Player.black, Point(3, 1))
+        board.place_stone(Player.white, Point(3, 2))
+        board.place_stone(Player.black, Point(3, 3))
+        board.place_stone(Player.white, Point(4, 1))
+        board.place_stone(Player.white, Point(4, 3))
+        board.place_stone(Player.white, Point(5, 2))
+
+        # Have black capture 4,2.
+        next_player, _ = game.situation
+        self.assertTrue(next_player, Player.black)
+
+        move = Move(Point(4, 2), is_pass=False, is_resign=False)
+        self.assertFalse(game.does_move_violate_ko(Player.black, move))
+        move = move.play(Point(4, 2))
+        game = game.apply_move(move)
+
+        # Have white break Ko rule.
+        next_player, _ = game.situation
+        self.assertTrue(next_player, Player.white)
+        move = Move(Point(3, 2), is_pass=False, is_resign=False)
+        move = move.play(Point(3, 2))
+        self.assertTrue(game.does_move_violate_ko(Player.white, move))
 
 class GameTest(unittest.TestCase):
     def test_new_game(self):
