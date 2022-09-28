@@ -124,10 +124,7 @@ class Board():  # <1>
         return string.color
 
     def get_go_string(self, point):  # <2>
-        string = self._grid.get(point)
-        if string is None:
-            return None
-        return string
+        return self._grid.get(point)
 # <1> Returns the content of a point on the board:  a Player if there is a stone on that point or else None.
 # <2> Returns the entire string of stones at a point: a GoString if there is a stone on that point or else None.
 # end::board_utils[]
