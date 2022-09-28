@@ -88,7 +88,6 @@ class Board:
             else:
                 if neighbor_string not in adjacent_opposite_color:
                     adjacent_opposite_color.append(neighbor_string)
-        new_string = GoString(player, [point], liberties)
 # tag::apply_zobrist[]
         new_string = GoString(player, [point], liberties)  # <1>
 
