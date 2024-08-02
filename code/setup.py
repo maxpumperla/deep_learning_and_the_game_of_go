@@ -8,7 +8,7 @@ setup(name='dlgo',
       install_requires=[
             'numpy<=1.14.5', 
             'tensorflow>=1.10.1', 
-            'keras==2.2.2', 
+            'keras==2.13.1', 
             'gomill', 
             'Flask>=0.10.1', 
             'Flask-Cors', 
